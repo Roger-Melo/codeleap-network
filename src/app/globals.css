@@ -6,6 +6,7 @@
 @theme {
   --color-primary-blue: #7695EC;
   --color-primary-gray: #DDDDDD;
+  --color-primary-dark-gray: #999999;
 }
 
 @theme inline {
