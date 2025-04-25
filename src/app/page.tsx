@@ -66,7 +66,7 @@ function DeleteIcon() {
 
 export default function Home() {
   return (
-    <section className="bg-white mx-auto max-w-[800px]">
+    <section className="bg-white mx-auto max-w-[800px] min-h-screen">
       <header className="bg-primary-blue py-8 px-6 border-b border-primary-dark-gray">
         <h1 className="text-xl sm:text-2xl font-bold text-white">CodeLeap Network</h1>
       </header>
@@ -87,7 +87,6 @@ export default function Home() {
             <Button type="submit" className="w-full py-5 bg-primary-blue sm:w-32 ml-auto hover:cursor-pointer hover:bg-primary-acqua">Create</Button>
           </form>
         </section>
-
         <section>
           <header className="bg-primary-blue rounded-t-2xl p-5 flex flex-col gap-4 sm:flex-row sm:justify-between">
             <h3 className="text-2xl sm:text-2xl font-bold text-white">My First Post at CodeLeap Network!</h3>
