@@ -50,11 +50,11 @@ export default function Home() {
 
           <form className="flex flex-col gap-4">
             <div className="flex flex-col gap-2 text-left">
-              <Label htmlFor="title">Title</Label>
+              <Label className="font-normal" htmlFor="title">Title</Label>
               <Input required id="title" type="text" placeholder="Hello world" autoFocus className="border-primary-darkest-gray" />
             </div>
             <div className="flex flex-col gap-2">
-              <Label htmlFor="content">Content</Label>
+              <Label className="font-normal" htmlFor="content">Content</Label>
               <Textarea required id="content" placeholder="Content here" className="border-primary-darkest-gray" />
             </div>
             <Button type="submit" className="w-full py-5 bg-primary-blue sm:w-32 ml-auto hover:cursor-pointer hover:bg-primary-green">Create</Button>
