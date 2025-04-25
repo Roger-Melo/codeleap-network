@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
-
 
 function EditIcon() {
   return (
@@ -49,17 +49,13 @@ export default function Home() {
           <h2 className="text-lg sm:text-xl font-bold">What’s on your mind?</h2>
 
           <form className="flex flex-col gap-4">
-            <div>
-              <label className="flex flex-col gap-2">
-                <span>Title</span>
-                <Input required type="text" placeholder="Hello world" autoFocus className="border-primary-darkest-gray" />
-              </label>
+            <div className="flex flex-col gap-2 text-left">
+              <Label htmlFor="title">Title</Label>
+              <Input required id="title" type="text" placeholder="Hello world" autoFocus className="border-primary-darkest-gray" />
             </div>
-            <div>
-              <label className="flex flex-col gap-2">
-                <span>Content</span>
-                <Textarea required placeholder="Content here" className="border-primary-darkest-gray" />
-              </label>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="content">Content</Label>
+              <Textarea required id="content" placeholder="Content here" className="border-primary-darkest-gray" />
             </div>
             <Button type="submit" className="w-full py-5 bg-primary-blue sm:w-32 ml-auto hover:cursor-pointer hover:bg-primary-green">Create</Button>
           </form>
