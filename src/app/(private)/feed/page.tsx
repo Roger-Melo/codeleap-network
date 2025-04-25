@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog"
 
-function EditIcon () {
+function EditIcon() {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -40,7 +40,7 @@ function EditIcon () {
   )
 }
 
-function DeleteIcon () {
+function DeleteIcon() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -64,7 +64,7 @@ function DeleteIcon () {
   )
 }
 
-export default function Feed () {
+export default function Feed() {
   return (
     <section className="bg-white mx-auto max-w-[800px] min-h-screen">
       <header className="bg-primary-blue py-8 px-6 border-b border-primary-dark-gray">
