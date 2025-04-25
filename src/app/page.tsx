@@ -1,9 +1,10 @@
 export default function Home() {
   return (
-    <>
-      <header>
-        <h1>CodeLeap Network</h1>
+    <section className="bg-white mx-auto max-w-[800px]">
+      <header className="bg-primary-blue py-8 px-6 border-b-2 border-gray-300">
+        <h1 className="text-xl sm:text-2xl font-bold text-white">CodeLeap Network</h1>
       </header>
+
       <main>
         <section>
           <h2>What’s on your mind?</h2>
@@ -51,6 +52,6 @@ export default function Home() {
           </article>
         </section>
       </main>
-    </>
+    </section>
   )
 }
