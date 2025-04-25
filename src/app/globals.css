@@ -5,8 +5,10 @@
 
 @theme {
   --color-primary-blue: #7695EC;
+  --color-primary-green: #38C9C8;
   --color-primary-gray: #DDDDDD;
   --color-primary-dark-gray: #999999;
+  --color-primary-darkest-gray: #777777;
 }
 
 @theme inline {

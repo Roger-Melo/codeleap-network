@@ -1,3 +1,7 @@
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+
 export default function Home() {
   return (
     <section className="bg-white mx-auto max-w-[800px]">
@@ -5,24 +9,24 @@ export default function Home() {
         <h1 className="text-xl sm:text-2xl font-bold text-white">CodeLeap Network</h1>
       </header>
 
-      <main>
-        <section>
-          <h2>What’s on your mind?</h2>
+      <main className="p-6">
+        <section className="border border-primary-dark-gray rounded-2xl p-5 flex flex-col gap-2">
+          <h2 className="text-lg sm:text-xl font-bold">What’s on your mind?</h2>
 
-          <form>
+          <form className="flex flex-col gap-4">
             <div>
-              <label>
-                Title
-                <input type="text" required placeholder="Hello world" />
+              <label className="flex flex-col gap-2">
+                <span>Title</span>
+                <Input required type="text" placeholder="Hello world" autoFocus className="border-primary-darkest-gray" />
               </label>
             </div>
             <div>
-              <label>
-                Content
-                <textarea required placeholder="Content here" />
+              <label className="flex flex-col gap-2">
+                <span>Content</span>
+                <Textarea required placeholder="Content here" className="border-primary-darkest-gray" />
               </label>
             </div>
-            <button type="submit">Create</button>
+            <Button type="submit" className="w-full py-5 bg-primary-blue sm:w-32 ml-auto hover:cursor-pointer hover:bg-primary-green">Create</Button>
           </form>
         </section>
 
