@@ -14,7 +14,7 @@ type RootLayoutProps = Readonly<{ children: React.ReactNode }>
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body className={`${roboto.className} antialiased`}>
+      <body className={`${roboto.className} antialiased bg-primary-gray`}>
         {children}
       </body>
     </html>

@@ -3,6 +3,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --color-primary-blue: #7695EC;
+  --color-primary-gray: #DDDDDD;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
