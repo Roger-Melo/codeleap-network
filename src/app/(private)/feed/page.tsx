@@ -64,32 +64,50 @@ function DeletePost() {
   )
 }
 
-function Post() {
-  return (
-    <section>
-      <header className="bg-primary-blue rounded-t-2xl p-5 flex flex-col gap-4 sm:flex-row sm:justify-between">
-        <h3 className="text-2xl sm:text-2xl font-bold text-white">My First Post at CodeLeap Network!</h3>
-        <nav className="sm:flex sm:flex-col sm:justify-center">
-          <ul className="flex gap-4 sm:gap-6 justify-end">
-            <li><EditPost /></li>
-            <li><DeletePost /></li>
-          </ul>
-        </nav>
-      </header>
-      <section className="p-5 border border-primary-dark-gray rounded-b-2xl border-t-0 flex flex-col gap-4">
-        <div className="text-lg text-primary-darkest-gray">
-          <h4 className="font-bold">@Victor</h4>
-          <p>
-            <time>25</time> minutes ago
-          </p>
-        </div>
-        <article className="text-lg flex flex-col gap-6">
-          <p>Curabitur suscipit suscipit tellus. Phasellus consectetuer vestibulum elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas egestas arcu quis ligula mattis placerat. Duis vel nibh at velit scelerisque suscipit.</p>
-          <p>Duis lobortis massa imperdiet quam. Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc, eu sollicitudin urna dolor sagittis lacus. Fusce a quam. Nullam vel sem. Nullam cursus lacinia erat.</p>
-        </article>
-      </section>
-    </section>
-  )
+// TODO: use zod
+type PostsListProps = {
+  posts: {
+    id: number,
+    username: string,
+    created_datetime: string,
+    title: string,
+    content: string,
+  }[]
+}
+
+function PostsList({ posts }: PostsListProps) {
+  return posts.length === 0
+    ? <h2 className="mx-auto text-center">Please create a first post</h2>
+    : (
+      <ul className="flex flex-col gap-6">
+        {posts.map((post) =>
+          <li key={post.id}>
+            <section>
+              <header className="bg-primary-blue rounded-t-2xl p-5 flex flex-col gap-4 sm:flex-row sm:justify-between">
+                <h3 className="text-2xl sm:text-2xl font-bold text-white">{post.title}</h3>
+                <nav className="sm:flex sm:flex-col sm:justify-center">
+                  <ul className="flex gap-4 sm:gap-6 justify-end">
+                    <li><EditPost /></li>
+                    <li><DeletePost /></li>
+                  </ul>
+                </nav>
+              </header>
+              <section className="p-5 border border-primary-dark-gray rounded-b-2xl border-t-0 flex flex-col gap-4">
+                <div className="text-lg text-primary-darkest-gray sm:flex sm:justify-between">
+                  <h4 className="font-bold">@{post.username}</h4>
+                  <p>
+                    <time>{post.created_datetime}</time> minutes ago
+                  </p>
+                </div>
+                <article className="text-lg flex flex-col gap-6">
+                  {post.content}
+                </article>
+              </section>
+            </section>
+          </li>
+        )}
+      </ul>
+    )
 }
 
 function PostForm() {
@@ -116,7 +134,18 @@ function Header() {
   )
 }
 
-export default function FeedPage() {
+export default async function FeedPage() {
+  const response = await fetch("https://dev.codeleap.co.uk/careers/")
+  if (!response.ok) {
+    return (
+      <h2 className="text-center mx-auto">
+        Could not get posts data. Please try again in a few minutes.
+      </h2>
+    )
+  }
+
+  // TODO: use zod
+  const data = await response.json()
   return (
     <section className="bg-white mx-auto max-w-[800px] min-h-screen">
       <Header />
@@ -125,7 +154,7 @@ export default function FeedPage() {
           <h2 className="text-lg sm:text-xl font-bold">What’s on your mind?</h2>
           <PostForm />
         </section>
-        <Post />
+        <PostsList posts={data.results} />
       </main>
     </section>
   )
