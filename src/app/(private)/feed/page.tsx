@@ -1,3 +1,4 @@
+import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -134,11 +135,20 @@ function Header() {
   )
 }
 
+const postSchema = z.object({
+  id: z.number(),
+  username: z.string(),
+  created_datetime: z.string(),
+  title: z.string(),
+  content: z.string(),
+})
+const postsDataSchema = z.object({ results: z.array(postSchema) })
+
 export default async function FeedPage() {
   const response = await fetch("https://dev.codeleap.co.uk/careers/")
   if (!response.ok) {
     return (
-      <h2 className="text-center mx-auto">
+      <h2 className="text-center mx-auto text-primary-red">
         Could not get posts data. Please try again in a few minutes.
       </h2>
     )
@@ -146,6 +156,7 @@ export default async function FeedPage() {
 
   // TODO: use zod
   const data = await response.json()
+  // const validatedData = 
   return (
     <section className="bg-white mx-auto max-w-[800px] min-h-screen">
       <Header />
