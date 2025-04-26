@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { PostsList } from "@/components/ui/posts-list"
+import { PostsList } from "@/components/posts-list"
 
 function PostForm() {
   return (
