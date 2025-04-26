@@ -116,7 +116,7 @@ function Header() {
   )
 }
 
-export default function Feed() {
+export default function FeedPage() {
   return (
     <section className="bg-white mx-auto max-w-[800px] min-h-screen">
       <Header />
