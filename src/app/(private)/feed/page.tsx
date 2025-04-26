@@ -1,10 +1,10 @@
-import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog"
+import { type Post, postsDataSchema } from "@/lib/types"
 
 function EditPost() {
   return (
@@ -65,16 +65,7 @@ function DeletePost() {
   )
 }
 
-// TODO: use zod
-type PostsListProps = {
-  posts: {
-    id: number,
-    username: string,
-    created_datetime: string,
-    title: string,
-    content: string,
-  }[]
-}
+type PostsListProps = { posts: Post[] }
 
 function PostsList({ posts }: PostsListProps) {
   return posts.length === 0
@@ -135,28 +126,14 @@ function Header() {
   )
 }
 
-const postSchema = z.object({
-  id: z.number(),
-  username: z.string(),
-  created_datetime: z.string(),
-  title: z.string(),
-  content: z.string(),
-})
-const postsDataSchema = z.object({ results: z.array(postSchema) })
-
 export default async function FeedPage() {
   const response = await fetch("https://dev.codeleap.co.uk/careers/")
   if (!response.ok) {
-    return (
-      <h2 className="text-center mx-auto text-primary-red">
-        Could not get posts data. Please try again in a few minutes.
-      </h2>
-    )
+    return <h2 className="text-center mx-auto text-primary-red">Could not get posts data. Please try again in a few minutes.</h2>
   }
 
-  // TODO: use zod
-  const data = await response.json()
-  // const validatedData = 
+  const data: unknown = await response.json()
+  const validatedData = postsDataSchema.safeParse(data)
   return (
     <section className="bg-white mx-auto max-w-[800px] min-h-screen">
       <Header />
@@ -165,7 +142,10 @@ export default async function FeedPage() {
           <h2 className="text-lg sm:text-xl font-bold">What’s on your mind?</h2>
           <PostForm />
         </section>
-        <PostsList posts={data.results} />
+        {validatedData.success
+          ? <PostsList posts={validatedData.data.results} />
+          : <h2 className="text-center mx-auto text-primary-red">Could not get posts data. Please try again in a few minutes.</h2>
+        }
       </main>
     </section>
   )
