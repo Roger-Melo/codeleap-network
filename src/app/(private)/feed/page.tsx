@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog"
 
-function EditIcon() {
+function EditPost() {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -40,7 +40,7 @@ function EditIcon() {
   )
 }
 
-function DeleteIcon() {
+function DeletePost() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -71,8 +71,8 @@ function Post() {
         <h3 className="text-2xl sm:text-2xl font-bold text-white">My First Post at CodeLeap Network!</h3>
         <nav className="sm:flex sm:flex-col sm:justify-center">
           <ul className="flex gap-4 sm:gap-6 justify-end">
-            <li><EditIcon /></li>
-            <li><DeleteIcon /></li>
+            <li><EditPost /></li>
+            <li><DeletePost /></li>
           </ul>
         </nav>
       </header>
