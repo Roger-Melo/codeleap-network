@@ -11,3 +11,5 @@ const postSchema = z.object({
 export const postsDataSchema = z.object({ results: z.array(postSchema) })
 
 export type Post = z.infer<typeof postSchema>
+
+export type PostIdProp = { postId: number }
