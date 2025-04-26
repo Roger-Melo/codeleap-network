@@ -64,6 +64,34 @@ function DeleteIcon() {
   )
 }
 
+function Post() {
+  return (
+    <section>
+      <header className="bg-primary-blue rounded-t-2xl p-5 flex flex-col gap-4 sm:flex-row sm:justify-between">
+        <h3 className="text-2xl sm:text-2xl font-bold text-white">My First Post at CodeLeap Network!</h3>
+        <nav className="sm:flex sm:flex-col sm:justify-center">
+          <ul className="flex gap-4 sm:gap-6 justify-end">
+            <li><EditIcon /></li>
+            <li><DeleteIcon /></li>
+          </ul>
+        </nav>
+      </header>
+      <section className="p-5 border border-primary-dark-gray rounded-b-2xl border-t-0 flex flex-col gap-4">
+        <div className="text-lg text-primary-darkest-gray">
+          <h4 className="font-bold">@Victor</h4>
+          <p>
+            <time>25</time> minutes ago
+          </p>
+        </div>
+        <article className="text-lg flex flex-col gap-6">
+          <p>Curabitur suscipit suscipit tellus. Phasellus consectetuer vestibulum elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas egestas arcu quis ligula mattis placerat. Duis vel nibh at velit scelerisque suscipit.</p>
+          <p>Duis lobortis massa imperdiet quam. Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc, eu sollicitudin urna dolor sagittis lacus. Fusce a quam. Nullam vel sem. Nullam cursus lacinia erat.</p>
+        </article>
+      </section>
+    </section>
+  )
+}
+
 export default function Feed() {
   return (
     <section className="bg-white mx-auto max-w-[800px] min-h-screen">
@@ -87,29 +115,7 @@ export default function Feed() {
             <Button type="submit" className="bg-primary-blue ml-auto hover:bg-primary-acqua">Create</Button>
           </form>
         </section>
-        <section>
-          <header className="bg-primary-blue rounded-t-2xl p-5 flex flex-col gap-4 sm:flex-row sm:justify-between">
-            <h3 className="text-2xl sm:text-2xl font-bold text-white">My First Post at CodeLeap Network!</h3>
-            <nav className="sm:flex sm:flex-col sm:justify-center">
-              <ul className="flex gap-4 sm:gap-6 justify-end">
-                <li><EditIcon /></li>
-                <li><DeleteIcon /></li>
-              </ul>
-            </nav>
-          </header>
-          <section className="p-5 border border-primary-dark-gray rounded-b-2xl border-t-0 flex flex-col gap-4">
-            <div className="text-lg text-primary-darkest-gray">
-              <h4 className="font-bold">@Victor</h4>
-              <p>
-                <time>25</time> minutes ago
-              </p>
-            </div>
-            <article className="text-lg flex flex-col gap-6">
-              <p>Curabitur suscipit suscipit tellus. Phasellus consectetuer vestibulum elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas egestas arcu quis ligula mattis placerat. Duis vel nibh at velit scelerisque suscipit.</p>
-              <p>Duis lobortis massa imperdiet quam. Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc, eu sollicitudin urna dolor sagittis lacus. Fusce a quam. Nullam vel sem. Nullam cursus lacinia erat.</p>
-            </article>
-          </section>
-        </section>
+        <Post />
       </main>
     </section>
   )
