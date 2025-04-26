@@ -12,7 +12,7 @@ export default function Home() {
             <Label className="font-normal" htmlFor="username">Please enter your username</Label>
             <Input required id="username" type="text" placeholder="John doe" autoFocus className="border-primary-darkest-gray" />
           </div>
-          <Button type="submit" className="uppercase w-full py-5 bg-primary-blue sm:w-32 ml-auto hover:cursor-pointer hover:bg-primary-acqua">Enter</Button>
+          <Button type="submit" className="uppercase bg-primary-blue ml-auto hover:bg-primary-acqua">Enter</Button>
         </form>
       </section>
     </main>

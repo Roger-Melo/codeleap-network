@@ -29,9 +29,9 @@ function EditIcon() {
             <Textarea required id="content" placeholder="Content here" className="border-primary-darkest-gray" />
           </div>
           <div className="flex flex-col gap-2 sm:gap-4 sm:flex-row sm:justify-end">
-            <Button type="submit" className="w-full py-5 bg-primary-green sm:w-32 hover:cursor-pointer hover:bg-primary-green/90 sm:order-2">Save changes</Button>
+            <Button type="submit" className="bg-primary-green hover:bg-primary-green/90 sm:order-2">Save changes</Button>
             <DialogClose asChild>
-              <Button type="button" variant="secondary" className="w-full py-5 border border-primary-darkest-gray hover:cursor-pointer hover:bg-gray-200 sm:w-32 sm:order-1">Cancel</Button>
+              <Button type="button" variant="secondary" className="border border-primary-darkest-gray hover:bg-gray-200 sm:order-1">Cancel</Button>
             </DialogClose>
           </div>
         </form>
@@ -84,7 +84,7 @@ export default function Feed() {
               <Label className="font-normal" htmlFor="content">Content</Label>
               <Textarea required id="content" placeholder="Content here" className="border-primary-darkest-gray" />
             </div>
-            <Button type="submit" className="w-full py-5 bg-primary-blue sm:w-32 ml-auto hover:cursor-pointer hover:bg-primary-acqua">Create</Button>
+            <Button type="submit" className="bg-primary-blue ml-auto hover:bg-primary-acqua">Create</Button>
           </form>
         </section>
         <section>
