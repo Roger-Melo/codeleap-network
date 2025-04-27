@@ -28,8 +28,12 @@ export function DeletePost({ postId }: PostIdProp) {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="py-5 hover:cursor-pointer border-primary-dark-gray sm:w-32">Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-primary-red py-5 hover:cursor-pointer hover:bg-primary-red/90 sm:w-32">Delete</AlertDialogAction>
+          <AlertDialogCancel className="py-5 hover:cursor-pointer border-primary-dark-gray sm:w-32">
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction className="bg-primary-red py-5 hover:cursor-pointer hover:bg-primary-red/90 sm:w-32">
+            Delete
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

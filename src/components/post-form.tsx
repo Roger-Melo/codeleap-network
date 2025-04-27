@@ -10,13 +10,27 @@ export function PostForm() {
       <form className="flex flex-col gap-4">
         <div className="flex flex-col gap-2 text-left">
           <Label className="font-normal" htmlFor="title">Title</Label>
-          <Input required id="title" type="text" placeholder="Hello world" autoFocus className="border-primary-darkest-gray" />
+          <Input
+            required
+            id="title"
+            type="text"
+            placeholder="Hello world"
+            autoFocus
+            className="border-primary-darkest-gray"
+          />
         </div>
         <div className="flex flex-col gap-2">
           <Label className="font-normal" htmlFor="content">Content</Label>
-          <Textarea required id="content" placeholder="Content here" className="border-primary-darkest-gray" />
+          <Textarea
+            required
+            id="content"
+            placeholder="Content here"
+            className="border-primary-darkest-gray"
+          />
         </div>
-        <Button type="submit" className="bg-primary-blue ml-auto hover:bg-primary-acqua">Create</Button>
+        <Button type="submit" className="bg-primary-blue ml-auto hover:bg-primary-acqua">
+          Create
+        </Button>
       </form>
     </section>
   )
