@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { usePostsContext } from "@/lib/hooks"
+import { DialogClose } from "@/components/ui/dialog"
 
 type PostFormProps = {
   actionType: "add" | "edit"
@@ -29,9 +30,9 @@ export const PostForm = forwardRef<HTMLFormElement, PostFormProps>(
 
     return (
       <>
-        <h2 className="text-lg sm:text-xl font-bold">
-          {actionType === "add" ? "What’s on your mind?" : "Edit post"}
-        </h2>
+        {actionType === "add" && (
+          <h2 className="text-lg sm:text-xl font-bold">"What’s on your mind?"</h2>
+        )}
         <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-5">
             <div className="space-y-3">
@@ -57,16 +58,34 @@ export const PostForm = forwardRef<HTMLFormElement, PostFormProps>(
               />
             </div>
           </div>
-          <div className="flex">
-            {actionType === "add"
-              ? (
+          {actionType === "add"
+            ? (
+              <div className="flex">
                 <Button type="submit" className="bg-primary-blue ml-auto hover:bg-primary-acqua">
                   Create
                 </Button>
-              )
-              : <h3 className="bg-red-600">RENDERIZAR BOTÕES DE EDIÇÃO</h3>
-            }
-          </div>
+              </div>
+            )
+            : (
+              <div className="flex flex-col gap-2 sm:gap-4 sm:flex-row sm:justify-end">
+                <Button
+                  type="submit"
+                  className="bg-primary-green hover:bg-primary-green/90 sm:order-2"
+                >
+                  Save changes
+                </Button>
+                <DialogClose asChild>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className="border border-primary-darkest-gray hover:bg-gray-200 sm:order-1"
+                  >
+                    Cancel
+                  </Button>
+                </DialogClose>
+              </div>
+            )
+          }
         </form>
       </>
     )

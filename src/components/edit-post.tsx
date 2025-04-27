@@ -1,13 +1,10 @@
 "use client"
 
 import { type ComponentPropsWithoutRef, forwardRef } from "react"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { usePostsContext } from "@/lib/hooks"
 import { type PostIdProp } from "@/lib/types"
+import { PostForm } from "./post-form"
 
 const EditIcon = forwardRef<SVGSVGElement, ComponentPropsWithoutRef<"svg">>((props, ref) => (
   <svg {...props} ref={ref} className="w-5 h-5 sm:w-6 sm:h-6 fill-white hover:cursor-pointer hover:fill-white/80" viewBox="0 0 26 24" xmlns="http://www.w3.org/2000/svg">
@@ -29,45 +26,7 @@ export function EditPost({ postId }: PostIdProp) {
         <DialogHeader>
           <DialogTitle>Edit post</DialogTitle>
         </DialogHeader>
-        <form className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2 text-left">
-            <Label className="font-normal" htmlFor="title">Title</Label>
-            <Input
-              required
-              id="title"
-              type="text"
-              placeholder="Hello world"
-              autoFocus
-              className="border-primary-darkest-gray"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label className="font-normal" htmlFor="content">Content</Label>
-            <Textarea
-              required
-              id="content"
-              placeholder="Content here"
-              className="border-primary-darkest-gray"
-            />
-          </div>
-          <div className="flex flex-col gap-2 sm:gap-4 sm:flex-row sm:justify-end">
-            <Button
-              type="submit"
-              className="bg-primary-green hover:bg-primary-green/90 sm:order-2"
-            >
-              Save changes
-            </Button>
-            <DialogClose asChild>
-              <Button
-                type="button"
-                variant="secondary"
-                className="border border-primary-darkest-gray hover:bg-gray-200 sm:order-1"
-              >
-                Cancel
-              </Button>
-            </DialogClose>
-          </div>
-        </form>
+        <PostForm actionType="edit" onFormSubmission={() => { }} />
       </DialogContent>
     </Dialog>
   )
