@@ -8,6 +8,7 @@ type PostsContextType = {
   selectedPostId: number | null
   handleSelectPost: (id: number) => void
   handleUnselectPost: () => void
+  handleDeletePost: (id: number) => void
 }
 
 type PostsContextProviderProps = {
@@ -29,8 +30,12 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
     setSelectedPostId(null)
   }
 
+  function handleDeletePost(id: number) {
+    setPosts((prev) => prev.filter((post) => post.id !== id))
+  }
+
   return (
-    <PostsContext.Provider value={{ posts, selectedPostId, handleSelectPost, handleUnselectPost }}>
+    <PostsContext.Provider value={{ posts, selectedPostId, handleSelectPost, handleUnselectPost, handleDeletePost }}>
       {children}
     </PostsContext.Provider>
   )

@@ -14,10 +14,10 @@ const DeleteIcon = forwardRef<SVGSVGElement, ComponentPropsWithoutRef<"svg">>((p
 DeleteIcon.displayName = "DeleteIcon"
 
 export function DeletePost({ postId }: PostIdProp) {
-  const { handleSelectPost, handleUnselectPost } = usePostsContext()
+  const { handleDeletePost } = usePostsContext()
   return (
-    <AlertDialog onOpenChange={(open) => !open && handleUnselectPost()}>
-      <AlertDialogTrigger asChild onClick={() => handleSelectPost(postId)}>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
         <DeleteIcon />
       </AlertDialogTrigger>
       <AlertDialogContent className="sm:max-w-[600px] md:max-w-[640px]">
@@ -31,7 +31,7 @@ export function DeletePost({ postId }: PostIdProp) {
           <AlertDialogCancel className="py-5 hover:cursor-pointer border-primary-dark-gray sm:w-32">
             Cancel
           </AlertDialogCancel>
-          <AlertDialogAction className="bg-primary-red py-5 hover:cursor-pointer hover:bg-primary-red/90 sm:w-32">
+          <AlertDialogAction onClick={() => handleDeletePost(postId)} className="bg-primary-red py-5 hover:cursor-pointer hover:bg-primary-red/90 sm:w-32">
             Delete
           </AlertDialogAction>
         </AlertDialogFooter>
