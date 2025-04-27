@@ -32,16 +32,39 @@ export function EditPost({ postId }: PostIdProp) {
         <form className="flex flex-col gap-4">
           <div className="flex flex-col gap-2 text-left">
             <Label className="font-normal" htmlFor="title">Title</Label>
-            <Input required id="title" type="text" placeholder="Hello world" autoFocus className="border-primary-darkest-gray" />
+            <Input
+              required
+              id="title"
+              type="text"
+              placeholder="Hello world"
+              autoFocus
+              className="border-primary-darkest-gray"
+            />
           </div>
           <div className="flex flex-col gap-2">
             <Label className="font-normal" htmlFor="content">Content</Label>
-            <Textarea required id="content" placeholder="Content here" className="border-primary-darkest-gray" />
+            <Textarea
+              required
+              id="content"
+              placeholder="Content here"
+              className="border-primary-darkest-gray"
+            />
           </div>
           <div className="flex flex-col gap-2 sm:gap-4 sm:flex-row sm:justify-end">
-            <Button type="submit" className="bg-primary-green hover:bg-primary-green/90 sm:order-2">Save changes</Button>
+            <Button
+              type="submit"
+              className="bg-primary-green hover:bg-primary-green/90 sm:order-2"
+            >
+              Save changes
+            </Button>
             <DialogClose asChild>
-              <Button type="button" variant="secondary" className="border border-primary-darkest-gray hover:bg-gray-200 sm:order-1">Cancel</Button>
+              <Button
+                type="button"
+                variant="secondary"
+                className="border border-primary-darkest-gray hover:bg-gray-200 sm:order-1"
+              >
+                Cancel
+              </Button>
             </DialogClose>
           </div>
         </form>
