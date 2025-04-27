@@ -6,9 +6,11 @@ import { type Post } from "@/lib/types"
 type PostsContextType = {
   posts: Post[]
   selectedPostId: number | null
+  selectedPost: Post | undefined
   handleSelectPost: (id: number) => void
   handleUnselectPost: () => void
   handleDeletePost: (id: number) => void
+  handleAddPost: (newPost: Omit<Post, "id" | "created_datetime" | "username">) => void
 }
 
 type PostsContextProviderProps = {
@@ -18,9 +20,21 @@ type PostsContextProviderProps = {
 
 export const PostsContext = createContext<PostsContextType | null>(null)
 
+function generateTimestamp() {
+  const now = new Date()
+  const iso = now.toISOString()
+  const [date, time] = iso.split('T')
+  const [hms, msAndZ] = time.split('.')
+  const ms = msAndZ.slice(0, 3) // milliseconds part
+  const extraMicroseconds = String(Math.floor(Math.random() * 1000)).padStart(3, '0') // fake microseconds
+  return `${date}T${hms}.${ms}${extraMicroseconds}Z`
+}
+
 export function PostsContextProvider({ data, children }: PostsContextProviderProps) {
   const [posts, setPosts] = useState(data)
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null)
+
+  const selectedPost = posts.find((post) => post.id === selectedPostId)
 
   function handleSelectPost(id: number) {
     setSelectedPostId(id)
@@ -34,8 +48,23 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
     setPosts((prev) => prev.filter((post) => post.id !== id))
   }
 
+  function handleAddPost(newPost: Omit<Post, "id" | "created_datetime" | "username">) {
+    setPosts((prev) => [
+      ...prev,
+      { ...newPost, id: Math.random(), created_datetime: generateTimestamp(), username: "ABC123", }
+    ])
+  }
+
   return (
-    <PostsContext.Provider value={{ posts, selectedPostId, handleSelectPost, handleUnselectPost, handleDeletePost }}>
+    <PostsContext.Provider value={{
+      posts,
+      selectedPostId,
+      selectedPost,
+      handleAddPost,
+      handleSelectPost,
+      handleUnselectPost,
+      handleDeletePost
+    }}>
       {children}
     </PostsContext.Provider>
   )
