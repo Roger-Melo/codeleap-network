@@ -24,16 +24,6 @@ type PostsContextProviderProps = {
 
 export const PostsContext = createContext<PostsContextType | null>(null)
 
-function generateTimestamp() {
-  const now = new Date()
-  const iso = now.toISOString()
-  const [date, time] = iso.split('T')
-  const [hms, msAndZ] = time.split('.')
-  const ms = msAndZ.slice(0, 3) // milliseconds part
-  const extraMicroseconds = String(Math.floor(Math.random() * 1000)).padStart(3, '0') // fake microseconds
-  return `${date}T${hms}.${ms}${extraMicroseconds}Z`
-}
-
 export function PostsContextProvider({ data, children }: PostsContextProviderProps) {
   const [posts, setPosts] = useState(data)
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null)
@@ -53,10 +43,6 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
   }
 
   async function handleAddPost(newPost: PostFromForm) {
-    // setPosts((prev) => [
-    //   ...prev,
-    //   { ...newPost, id: Math.random(), created_datetime: generateTimestamp(), username: "ABC123", }
-    // ])
     await addPost({ username: "ABC123", title: newPost.title, content: newPost.content })
   }
 

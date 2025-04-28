@@ -5,9 +5,8 @@ import { baseUrl } from "@/lib/utils"
 
 export async function addPost(data: Omit<Post, "id" | "created_datetime">) {
   await fetch(baseUrl, {
-    method: 'POST',
-    // body: {data},
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(data)
   })
-  console.log("addPost executed")
-  console.log("data:", data)
 }
