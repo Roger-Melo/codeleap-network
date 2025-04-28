@@ -1,6 +1,6 @@
 "use client"
 
-import { type ComponentPropsWithoutRef, forwardRef } from "react"
+import { type ComponentPropsWithoutRef, forwardRef, useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { usePostsContext } from "@/lib/hooks"
 import { type PostIdProp } from "@/lib/types"
@@ -16,9 +16,18 @@ const EditIcon = forwardRef<SVGSVGElement, ComponentPropsWithoutRef<"svg">>((pro
 EditIcon.displayName = "EditIcon"
 
 export function EditPost({ postId }: PostIdProp) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { handleSelectPost, handleUnselectPost } = usePostsContext()
+
+  function handleOpenChange(open: boolean) {
+    setIsDialogOpen(open)
+    if (!open) {
+      handleUnselectPost()
+    }
+  }
+
   return (
-    <Dialog onOpenChange={(open) => !open && handleUnselectPost()}>
+    <Dialog open={isDialogOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild onClick={() => handleSelectPost(postId)}>
         <EditIcon />
       </DialogTrigger>
@@ -26,7 +35,7 @@ export function EditPost({ postId }: PostIdProp) {
         <DialogHeader>
           <DialogTitle>Edit post</DialogTitle>
         </DialogHeader>
-        <PostForm actionType="edit" onFormSubmission={() => { }} />
+        <PostForm actionType="edit" onFormSubmission={() => setIsDialogOpen(false)} />
       </DialogContent>
     </Dialog>
   )

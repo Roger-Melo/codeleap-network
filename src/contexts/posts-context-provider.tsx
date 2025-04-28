@@ -3,6 +3,8 @@
 import { createContext, useState } from "react"
 import { type Post } from "@/lib/types"
 
+type PostFromForm = Omit<Post, "id" | "created_datetime" | "username">
+
 type PostsContextType = {
   posts: Post[]
   selectedPostId: number | null
@@ -10,7 +12,8 @@ type PostsContextType = {
   handleSelectPost: (id: number) => void
   handleUnselectPost: () => void
   handleDeletePost: (id: number) => void
-  handleAddPost: (newPost: Omit<Post, "id" | "created_datetime" | "username">) => void
+  handleAddPost: (newPost: PostFromForm) => void
+  handleEditPost: (postId: number, updatedPostData: PostFromForm) => void
 }
 
 type PostsContextProviderProps = {
@@ -48,11 +51,18 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
     setPosts((prev) => prev.filter((post) => post.id !== id))
   }
 
-  function handleAddPost(newPost: Omit<Post, "id" | "created_datetime" | "username">) {
+  function handleAddPost(newPost: PostFromForm) {
     setPosts((prev) => [
       ...prev,
       { ...newPost, id: Math.random(), created_datetime: generateTimestamp(), username: "ABC123", }
     ])
+  }
+
+  function handleEditPost(postId: number, updatedPostData: PostFromForm) {
+    setPosts((prev) => prev.map((post) => post.id === postId
+      ? { ...post, title: updatedPostData.title, content: updatedPostData.content }
+      : post
+    ))
   }
 
   return (
@@ -63,7 +73,8 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
       handleAddPost,
       handleSelectPost,
       handleUnselectPost,
-      handleDeletePost
+      handleDeletePost,
+      handleEditPost
     }}>
       {children}
     </PostsContext.Provider>

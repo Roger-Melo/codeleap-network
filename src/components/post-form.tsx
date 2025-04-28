@@ -15,16 +15,22 @@ type PostFormProps = {
 
 export const PostForm = forwardRef<HTMLFormElement, PostFormProps>(
   function PostForm({ actionType, onFormSubmission }, formRef) {
-    const { handleAddPost, selectedPost } = usePostsContext()
+    const { handleAddPost, handleEditPost, selectedPost } = usePostsContext()
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
       e.preventDefault()
       const formData = new FormData(e.currentTarget)
-      const newPost = {
+      const post = {
         title: formData.get("title") as string,
         content: formData.get("content") as string,
       }
-      handleAddPost(newPost)
+
+      if (actionType === "add") {
+        handleAddPost(post)
+      } else if (actionType === "edit") {
+        handleEditPost(selectedPost!.id, post)
+      }
+
       onFormSubmission()
     }
 
