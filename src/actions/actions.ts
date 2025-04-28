@@ -1,5 +1,6 @@
 "use server"
 
+import { revalidatePath } from "next/cache"
 import { type Post } from "@/lib/types"
 import { baseUrl } from "@/lib/utils"
 
@@ -17,4 +18,6 @@ export async function addPost(formData: FormData) {
     headers: { "content-type": "application/json" },
     body: JSON.stringify(post)
   })
+
+  revalidatePath("/feed", "layout")
 }

@@ -22,8 +22,7 @@ type PostsContextProviderProps = {
 
 export const PostsContext = createContext<PostsContextType | null>(null)
 
-export function PostsContextProvider({ data, children }: PostsContextProviderProps) {
-  const [posts, setPosts] = useState(data)
+export function PostsContextProvider({ data: posts, children }: PostsContextProviderProps) {
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null)
 
   const selectedPost = posts.find((post) => post.id === selectedPostId)
@@ -37,14 +36,14 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
   }
 
   function handleDeletePost(id: number) {
-    setPosts((prev) => prev.filter((post) => post.id !== id))
+    // setPosts((prev) => prev.filter((post) => post.id !== id))
   }
 
   function handleEditPost(postId: number, updatedPostData: PostFromForm) {
-    setPosts((prev) => prev.map((post) => post.id === postId
-      ? { ...post, title: updatedPostData.title, content: updatedPostData.content }
-      : post
-    ))
+    // setPosts((prev) => prev.map((post) => post.id === postId
+    //   ? { ...post, title: updatedPostData.title, content: updatedPostData.content }
+    //   : post
+    // ))
   }
 
   return (
