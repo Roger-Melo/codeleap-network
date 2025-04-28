@@ -5,8 +5,8 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { PostFormFooter } from "./post-form-footer"
 import { usePostsContext } from "@/lib/hooks"
-import { addPost } from "@/actions/actions"
-import { ActionTypes } from "@/lib/types"
+import { addPost, editPost } from "@/actions/actions"
+import { type ActionTypes } from "@/lib/types"
 
 type PostFormProps = {
   actionType: ActionTypes
@@ -18,12 +18,16 @@ function PostFormHeading() {
 }
 
 export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
-  const { selectedPost } = usePostsContext()
+  const { selectedPost, selectedPostId } = usePostsContext()
 
   async function handleFormSubmittion(formData: FormData) {
     if (actionType === "edit" && onFormSubmission) {
       onFormSubmission()
-      // await editPost(formData)
+      const error = await editPost(formData, selectedPostId as number)
+      if (error) {
+        alert(error.message)
+      }
+
       return
     }
 
