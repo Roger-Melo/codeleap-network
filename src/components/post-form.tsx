@@ -26,7 +26,11 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
       // await editPost(formData)
       return
     }
-    await addPost(formData)
+
+    const error = await addPost(formData)
+    if (error) {
+      alert(error.message)
+    }
   }
 
   return (
