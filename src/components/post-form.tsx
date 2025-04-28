@@ -1,16 +1,20 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { PostFormFooter } from "./post-form-footer"
 import { usePostsContext } from "@/lib/hooks"
-import { DialogClose } from "@/components/ui/dialog"
 import { addPost } from "@/actions/actions"
+import { ActionTypes } from "@/lib/types"
 
 type PostFormProps = {
-  actionType: "add" | "edit"
+  actionType: ActionTypes
   onFormSubmission?: () => void
+}
+
+function PostFormHeading() {
+  return <h2 className="text-lg sm:text-xl font-bold">"What’s on your mind?"</h2>
 }
 
 export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
@@ -27,9 +31,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
 
   return (
     <>
-      {actionType === "add" && (
-        <h2 className="text-lg sm:text-xl font-bold">"What’s on your mind?"</h2>
-      )}
+      {actionType === "add" && <PostFormHeading />}
       <form action={handleFormSubmittion} className="space-y-4">
         <div className="space-y-5">
           <div className="space-y-3">
@@ -57,34 +59,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
             />
           </div>
         </div>
-        {actionType === "add"
-          ? (
-            <div className="flex">
-              <Button type="submit" className="bg-primary-blue ml-auto hover:bg-primary-acqua">
-                Create
-              </Button>
-            </div>
-          )
-          : (
-            <div className="flex flex-col gap-2 sm:gap-4 sm:flex-row sm:justify-end">
-              <Button
-                type="submit"
-                className="bg-primary-green hover:bg-primary-green/90 sm:order-2"
-              >
-                Save changes
-              </Button>
-              <DialogClose asChild>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  className="border border-primary-darkest-gray hover:bg-gray-200 sm:order-1"
-                >
-                  Cancel
-                </Button>
-              </DialogClose>
-            </div>
-          )
-        }
+        <PostFormFooter actionType={actionType} />
       </form>
     </>
   )

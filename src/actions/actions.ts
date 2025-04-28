@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { type Post } from "@/lib/types"
-import { baseUrl } from "@/lib/utils"
+import { baseUrl, delay } from "@/lib/utils"
 
 type PostToApi = Omit<Post, "id" | "created_datetime">
 
@@ -12,6 +12,8 @@ export async function addPost(formData: FormData) {
     content: formData.get("content") as string,
     username: "ABC123",
   }
+
+  await delay(2000)
 
   await fetch(baseUrl, {
     method: "POST",
