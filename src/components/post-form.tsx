@@ -15,7 +15,7 @@ type PostFormProps = {
 
 export const PostForm = forwardRef<HTMLFormElement, PostFormProps>(
   function PostForm({ actionType, onFormSubmission }, formRef) {
-    const { handleAddPost } = usePostsContext()
+    const { handleAddPost, selectedPost } = usePostsContext()
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
       e.preventDefault()
@@ -43,6 +43,7 @@ export const PostForm = forwardRef<HTMLFormElement, PostFormProps>(
                 name="title"
                 type="text"
                 placeholder="Hello world"
+                defaultValue={actionType === "edit" ? selectedPost?.title : ""}
                 autoFocus
                 className="border-primary-darkest-gray"
               />
@@ -54,6 +55,7 @@ export const PostForm = forwardRef<HTMLFormElement, PostFormProps>(
                 id="content"
                 name="content"
                 placeholder="Content here"
+                defaultValue={actionType === "edit" ? selectedPost?.content : ""}
                 className="border-primary-darkest-gray"
               />
             </div>
