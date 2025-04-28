@@ -17,7 +17,7 @@ export const PostForm = forwardRef<HTMLFormElement, PostFormProps>(
   function PostForm({ actionType, onFormSubmission }, formRef) {
     const { handleAddPost, handleEditPost, selectedPost } = usePostsContext()
 
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
       e.preventDefault()
       const formData = new FormData(e.currentTarget)
       const post = {
@@ -26,7 +26,7 @@ export const PostForm = forwardRef<HTMLFormElement, PostFormProps>(
       }
 
       if (actionType === "add") {
-        handleAddPost(post)
+        await handleAddPost(post)
       } else if (actionType === "edit") {
         handleEditPost(selectedPost!.id, post)
       }

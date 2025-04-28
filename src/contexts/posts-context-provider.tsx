@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useState } from "react"
+import { addPost } from "@/actions/actions"
 import { type Post } from "@/lib/types"
 
 type PostFromForm = Omit<Post, "id" | "created_datetime" | "username">
@@ -51,11 +52,12 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
     setPosts((prev) => prev.filter((post) => post.id !== id))
   }
 
-  function handleAddPost(newPost: PostFromForm) {
-    setPosts((prev) => [
-      ...prev,
-      { ...newPost, id: Math.random(), created_datetime: generateTimestamp(), username: "ABC123", }
-    ])
+  async function handleAddPost(newPost: PostFromForm) {
+    // setPosts((prev) => [
+    //   ...prev,
+    //   { ...newPost, id: Math.random(), created_datetime: generateTimestamp(), username: "ABC123", }
+    // ])
+    await addPost({ username: "ABC123", title: newPost.title, content: newPost.content })
   }
 
   function handleEditPost(postId: number, updatedPostData: PostFromForm) {

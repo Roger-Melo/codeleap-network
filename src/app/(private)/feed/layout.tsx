@@ -1,5 +1,6 @@
 import { postsDataSchema } from "@/lib/types"
 import { PostsContextProvider } from "@/contexts/posts-context-provider"
+import { baseUrl } from "@/lib/utils"
 
 function ErrorMessage() {
   return (
@@ -12,7 +13,7 @@ function ErrorMessage() {
 type FeedLayoutProps = { children: React.ReactNode }
 
 export default async function FeedLayout({ children }: FeedLayoutProps) {
-  const response = await fetch("https://dev.codeleap.co.uk/careers/")
+  const response = await fetch(baseUrl)
   if (!response.ok) {
     return <ErrorMessage />
   }
