@@ -35,7 +35,7 @@ export function EditPost({ postId }: PostIdProp) {
         <DialogHeader>
           <DialogTitle>Edit post</DialogTitle>
         </DialogHeader>
-        <PostForm actionType="edit" />
+        <PostForm actionType="edit" onFormSubmission={() => setIsDialogOpen(false)} />
       </DialogContent>
     </Dialog>
   )

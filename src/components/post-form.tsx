@@ -10,16 +10,27 @@ import { addPost } from "@/actions/actions"
 
 type PostFormProps = {
   actionType: "add" | "edit"
+  onFormSubmission?: () => void
 }
 
-export function PostForm({ actionType }: PostFormProps) {
+export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   const { selectedPost } = usePostsContext()
+
+  async function handleFormSubmittion(formData: FormData) {
+    if (actionType === "edit" && onFormSubmission) {
+      onFormSubmission()
+      // await editPost(formData)
+      return
+    }
+    await addPost(formData)
+  }
+
   return (
     <>
       {actionType === "add" && (
         <h2 className="text-lg sm:text-xl font-bold">"What’s on your mind?"</h2>
       )}
-      <form action={addPost} className="space-y-4">
+      <form action={handleFormSubmittion} className="space-y-4">
         <div className="space-y-5">
           <div className="space-y-3">
             <Label className="font-normal" htmlFor="title">Title</Label>
