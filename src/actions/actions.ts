@@ -27,6 +27,7 @@ export async function addPost(formData: FormData) {
     }
 
     const data = await response.json()
+    // at the time of writing, a post object that wasn't created on db don't have these properties
     const postWasNotReallyCreatedOnDb = !data.id || !data.created_datetime
     if (postWasNotReallyCreatedOnDb) {
       return failMessage
