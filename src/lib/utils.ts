@@ -6,3 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const baseUrl = "https://dev.codeleap.co.uk/careers/"
+
+export async function delay(milliseconds: number) {
+  await new Promise((resolve) => setTimeout(resolve, milliseconds))
+}
