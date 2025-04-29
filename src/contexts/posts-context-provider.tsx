@@ -1,9 +1,8 @@
 "use client"
 
-import { createContext, useState } from "react"
-import { type Post } from "@/lib/types"
-
-type PostFromForm = Omit<Post, "id" | "created_datetime" | "username">
+import { createContext, useOptimistic, useState } from "react"
+import { type Post, type EditedPostToApi, type AddedPostToApi } from "@/lib/types"
+import { addPost, editPost, deletePost } from "@/actions/actions"
 
 type PostsContextType = {
   posts: Post[]
@@ -11,8 +10,9 @@ type PostsContextType = {
   selectedPost: Post | undefined
   handleSelectPost: (id: number) => void
   handleUnselectPost: () => void
-  handleDeletePost: (id: number) => void
-  handleEditPost: (postId: number, updatedPostData: PostFromForm) => void
+  handleDeletePost: (id: number) => Promise<void>
+  handleEditPost: (editedData: EditedPostToApi, selectedPostId: number) => Promise<void>
+  handleAddPost: (newPost: AddedPostToApi) => Promise<void>
 }
 
 type PostsContextProviderProps = {
@@ -22,10 +22,11 @@ type PostsContextProviderProps = {
 
 export const PostsContext = createContext<PostsContextType | null>(null)
 
-export function PostsContextProvider({ data: posts, children }: PostsContextProviderProps) {
+export function PostsContextProvider({ data, children }: PostsContextProviderProps) {
+  const [optimisticPosts, setOptimisticPosts] = useOptimistic(data)
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null)
 
-  const selectedPost = posts.find((post) => post.id === selectedPostId)
+  const selectedPost = optimisticPosts.find((post) => post.id === selectedPostId)
 
   function handleSelectPost(id: number) {
     setSelectedPostId(id)
@@ -35,27 +36,35 @@ export function PostsContextProvider({ data: posts, children }: PostsContextProv
     setSelectedPostId(null)
   }
 
-  function handleDeletePost(id: number) {
-    // setPosts((prev) => prev.filter((post) => post.id !== id))
-    // setSelectedPostId(null)
+  async function handleAddPost(newPost: AddedPostToApi) {
+    const error = await addPost(newPost)
+    if (error) {
+      alert(error.message)
+    }
   }
 
-  function handleEditPost(postId: number, updatedPostData: PostFromForm) {
-    // setPosts((prev) => prev.map((post) => post.id === postId
-    //   ? { ...post, title: updatedPostData.title, content: updatedPostData.content }
-    //   : post
-    // ))
+  async function handleDeletePost(id: number) {
+    await deletePost(id)
+    setSelectedPostId(null)
+  }
+
+  async function handleEditPost(editedData: EditedPostToApi, selectedPostId: number) {
+    const error = await editPost(editedData, selectedPostId)
+    if (error) {
+      alert(error.message)
+    }
   }
 
   return (
     <PostsContext.Provider value={{
-      posts,
+      posts: optimisticPosts,
       selectedPostId,
       selectedPost,
       handleSelectPost,
       handleUnselectPost,
       handleDeletePost,
-      handleEditPost
+      handleEditPost,
+      handleAddPost
     }}>
       {children}
     </PostsContext.Provider>

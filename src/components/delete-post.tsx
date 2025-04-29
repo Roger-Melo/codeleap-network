@@ -1,10 +1,9 @@
 "use client"
 
-import { type ComponentPropsWithoutRef, forwardRef, useTransition, useState } from "react"
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
+import { type ComponentPropsWithoutRef, forwardRef } from "react"
+import { AlertDialogAction, AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { type PostIdProp } from "@/lib/types"
-import { deletePost } from "@/actions/actions"
+import { usePostsContext } from "@/lib/hooks"
 
 const DeleteIcon = forwardRef<SVGSVGElement, ComponentPropsWithoutRef<"svg">>((props, ref) => (
   <svg {...props} ref={ref} className="w-4 h-5 sm:w-5 sm:h-6 fill-white hover:cursor-pointer hover:fill-white/80" viewBox="0 0 19 24" xmlns="http://www.w3.org/2000/svg">
@@ -15,18 +14,9 @@ const DeleteIcon = forwardRef<SVGSVGElement, ComponentPropsWithoutRef<"svg">>((p
 DeleteIcon.displayName = "DeleteIcon"
 
 export function DeletePost({ postId }: PostIdProp) {
-  const [open, setOpen] = useState(false)
-  const [isPending, startTransition] = useTransition()
-
-  function handleDeletePost() {
-    startTransition(async () => {
-      await deletePost(postId)
-      setOpen(false)
-    })
-  }
-
+  const { handleDeletePost } = usePostsContext()
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
+    <AlertDialog >
       <AlertDialogTrigger asChild>
         <DeleteIcon />
       </AlertDialogTrigger>
@@ -38,19 +28,12 @@ export function DeletePost({ postId }: PostIdProp) {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel
-            disabled={isPending}
-            className="py-5 hover:cursor-pointer border-primary-dark-gray sm:w-32"
-          >
+          <AlertDialogCancel className="py-5 hover:cursor-pointer border-primary-dark-gray sm:w-32">
             Cancel
           </AlertDialogCancel>
-          <Button
-            disabled={isPending}
-            onClick={handleDeletePost}
-            className="bg-primary-red border border-primary-red text-white py-5 sm:w-32 rounded-md hover:bg-primary-red/90 flex items-center justify-center gap-2 disabled:opacity-50"
-          >
-            {isPending ? "Deleting post..." : "Delete"}
-          </Button>
+          <AlertDialogAction onClick={async () => await handleDeletePost(postId)} className="bg-primary-red py-5 hover:cursor-pointer hover:bg-primary-red/90 sm:w-32">
+            Delete
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

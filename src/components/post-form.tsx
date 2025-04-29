@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { PostFormFooter } from "./post-form-footer"
 import { usePostsContext } from "@/lib/hooks"
-import { addPost, editPost } from "@/actions/actions"
 import { type ActionTypes } from "@/lib/types"
 
 type PostFormProps = {
@@ -17,25 +16,23 @@ function PostFormHeading() {
   return <h2 className="text-lg sm:text-xl font-bold">"What’s on your mind?"</h2>
 }
 
-function alertIfError(error: { message: string } | undefined) {
-  if (error) {
-    alert(error.message)
-  }
-}
-
 export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
-  const { selectedPost, selectedPostId } = usePostsContext()
+  const { selectedPost, selectedPostId, handleAddPost, handleEditPost } = usePostsContext()
 
   async function handleFormSubmittion(formData: FormData) {
+    const post = {
+      title: formData.get("title") as string,
+      content: formData.get("content") as string,
+    }
+
     if (actionType === "edit" && onFormSubmission) {
-      const error = await editPost(formData, selectedPostId as number)
+      await handleEditPost(post, selectedPostId as number)
       onFormSubmission()
-      alertIfError(error)
       return
     }
 
-    const error = await addPost(formData)
-    alertIfError(error)
+    const newPost = { ...post, username: "ABC123" }
+    await handleAddPost(newPost)
   }
 
   return (
