@@ -37,6 +37,7 @@ export function PostsContextProvider({ data: posts, children }: PostsContextProv
 
   function handleDeletePost(id: number) {
     // setPosts((prev) => prev.filter((post) => post.id !== id))
+    // setSelectedPostId(null)
   }
 
   function handleEditPost(postId: number, updatedPostData: PostFromForm) {

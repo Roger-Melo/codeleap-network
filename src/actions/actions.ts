@@ -65,3 +65,23 @@ export async function editPost(formData: FormData, selectedPostId: number) {
 
   revalidatePath("/feed", "layout")
 }
+
+export async function deletePost(postId: number) {
+  const failMessage = { message: "Could not delete post. Please, try again in a few minutes." }
+  try {
+    await delay(2000)
+    const response = await fetch(`${baseUrl}${postId}/`, {
+      method: "DELETE",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({})
+    })
+
+    if (!response.ok) {
+      return failMessage
+    }
+  } catch (error) {
+    return failMessage
+  }
+
+  revalidatePath("/feed", "layout")
+}
