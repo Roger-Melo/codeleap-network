@@ -30,6 +30,7 @@ export function PostFormFooter({ actionType }: PostFormFooterProps) {
         </Button>
         <DialogClose asChild>
           <Button
+            disabled={pending}
             type="button"
             variant="secondary"
             className="border border-primary-darkest-gray hover:bg-gray-200 sm:order-1"
