@@ -25,7 +25,12 @@ export const PostsContext = createContext<PostsContextType | null>(null)
 
 export function PostsContextProvider({ data, children }: PostsContextProviderProps) {
   const [optimisticPosts, setOptimisticPosts] = useOptimistic(data, (state, newPost) => {
-    return [newPost, ...state]
+    const tempPostToOtimisticUI = {
+      ...newPost,
+      id: Math.random(),
+      created_datetime: generateTempTimestamp()
+    }
+    return [tempPostToOtimisticUI, ...state]
   })
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null)
 
@@ -40,13 +45,7 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
   }
 
   async function handleAddPost(newPost: AddedPostToApi) {
-    const tempPostToOtimisticUI = {
-      ...newPost,
-      id: Math.random(),
-      created_datetime: generateTempTimestamp()
-    }
-
-    setOptimisticPosts(tempPostToOtimisticUI)
+    setOptimisticPosts(newPost)
     const error = await addPost(newPost)
     if (error) {
       alert(error.message)

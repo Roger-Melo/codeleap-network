@@ -11,6 +11,7 @@ export function PostFormFooter({ actionType }: PostFormFooterProps) {
     ? (
       <div className="flex">
         <Button
+          disabled={pending}
           type="submit"
           className="bg-primary-blue ml-auto hover:bg-primary-acqua"
         >
