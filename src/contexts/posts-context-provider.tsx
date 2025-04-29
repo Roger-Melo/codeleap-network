@@ -24,13 +24,26 @@ type PostsContextProviderProps = {
 export const PostsContext = createContext<PostsContextType | null>(null)
 
 export function PostsContextProvider({ data, children }: PostsContextProviderProps) {
-  const [optimisticPosts, setOptimisticPosts] = useOptimistic(data, (state, newPost) => {
-    const tempPostToOtimisticUI = {
-      ...newPost,
-      id: Math.random(),
-      created_datetime: generateTempTimestamp()
+  const [optimisticPosts, setOptimisticPosts] = useOptimistic(data, (state, { action, payload }) => {
+    if (action === "add") {
+      const tempPostToOptimisticUi = {
+        ...payload,
+        id: Math.random(),
+        created_datetime: generateTempTimestamp()
+      }
+      return [tempPostToOptimisticUi, ...state]
     }
-    return [tempPostToOtimisticUI, ...state]
+
+    if (action === "edit") {
+      return state.map((post) =>
+        post.id === payload.selectedPostId ? { ...post, ...payload.editedData } : post)
+    }
+
+    if (action === "delete") {
+      return state.filter((post) => post.id !== payload.id)
+    }
+
+    return state
   })
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null)
 
@@ -45,7 +58,7 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
   }
 
   async function handleAddPost(newPost: AddedPostToApi) {
-    setOptimisticPosts(newPost)
+    setOptimisticPosts({ action: "add", payload: newPost })
     const error = await addPost(newPost)
     if (error) {
       alert(error.message)
@@ -53,11 +66,13 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
   }
 
   async function handleDeletePost(id: number) {
+    setOptimisticPosts({ action: "delete", payload: { id } })
     await deletePost(id)
     setSelectedPostId(null)
   }
 
   async function handleEditPost(editedData: EditedPostToApi, selectedPostId: number) {
+    setOptimisticPosts({ action: "edit", payload: { editedData, selectedPostId } })
     const error = await editPost(editedData, selectedPostId)
     if (error) {
       alert(error.message)

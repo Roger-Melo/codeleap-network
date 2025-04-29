@@ -26,8 +26,8 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
     }
 
     if (actionType === "edit" && onFormSubmission) {
-      await handleEditPost(post, selectedPostId as number)
       onFormSubmission()
+      await handleEditPost(post, selectedPostId as number)
       return
     }
 
