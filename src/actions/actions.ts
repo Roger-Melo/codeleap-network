@@ -50,7 +50,7 @@ export async function editPost(formData: FormData, selectedPostId: number) {
     }
 
     await delay(2000)
-    const response = await fetch(`${baseUrl}${selectedPostId}`, {
+    const response = await fetch(`${baseUrl}${selectedPostId}/`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(post)

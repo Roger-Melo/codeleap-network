@@ -17,24 +17,25 @@ function PostFormHeading() {
   return <h2 className="text-lg sm:text-xl font-bold">"What’s on your mind?"</h2>
 }
 
+function alertIfError(error: { message: string } | undefined) {
+  if (error) {
+    alert(error.message)
+  }
+}
+
 export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   const { selectedPost, selectedPostId } = usePostsContext()
 
   async function handleFormSubmittion(formData: FormData) {
     if (actionType === "edit" && onFormSubmission) {
-      onFormSubmission()
       const error = await editPost(formData, selectedPostId as number)
-      if (error) {
-        alert(error.message)
-      }
-
+      onFormSubmission()
+      alertIfError(error)
       return
     }
 
     const error = await addPost(formData)
-    if (error) {
-      alert(error.message)
-    }
+    alertIfError(error)
   }
 
   return (
