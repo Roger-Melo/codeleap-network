@@ -11,7 +11,7 @@ export async function delay(milliseconds: number) {
   await new Promise((resolve) => setTimeout(resolve, milliseconds))
 }
 
-export const generateTempTimestamp = () => {
+export function generateTempTimestamp() {
   const now = new Date()
   const iso = now.toISOString()
   const [date, time] = iso.split('T')
@@ -19,4 +19,10 @@ export const generateTempTimestamp = () => {
   const ms = msAndZ.slice(0, 3) // milliseconds part
   const extraMicroseconds = String(Math.floor(Math.random() * 1000)).padStart(3, '0') // fake microseconds
   return `${date}T${hms}.${ms}${extraMicroseconds}Z`
+}
+
+export function alertIfError(error: { message: string } | undefined) {
+  if (error) {
+    alert(error.message)
+  }
 }

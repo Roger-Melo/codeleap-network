@@ -1,9 +1,9 @@
 "use client"
 
-import { createContext, useOptimistic, useState } from "react"
+import { createContext, useOptimistic, useState, startTransition } from "react"
 import { type Post, type EditedPostToApi, type AddedPostToApi } from "@/lib/types"
 import { addPost, editPost, deletePost } from "@/actions/actions"
-import { generateTempTimestamp } from "@/lib/utils"
+import { generateTempTimestamp, alertIfError } from "@/lib/utils"
 
 type PostsContextType = {
   posts: Post[]
@@ -60,23 +60,21 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
   async function handleAddPost(newPost: AddedPostToApi) {
     setOptimisticPosts({ action: "add", payload: newPost })
     const error = await addPost(newPost)
-    if (error) {
-      alert(error.message)
-    }
+    alertIfError(error)
   }
 
   async function handleDeletePost(id: number) {
-    setOptimisticPosts({ action: "delete", payload: { id } })
-    await deletePost(id)
+    // startTransition because there's no form action to delete a post
+    startTransition(() => setOptimisticPosts({ action: "delete", payload: { id } }))
+    const error = await deletePost(id)
+    alertIfError(error)
     setSelectedPostId(null)
   }
 
   async function handleEditPost(editedData: EditedPostToApi, selectedPostId: number) {
     setOptimisticPosts({ action: "edit", payload: { editedData, selectedPostId } })
     const error = await editPost(editedData, selectedPostId)
-    if (error) {
-      alert(error.message)
-    }
+    alertIfError(error)
   }
 
   return (

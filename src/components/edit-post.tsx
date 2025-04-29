@@ -1,6 +1,7 @@
 "use client"
 
 import { type ComponentPropsWithoutRef, forwardRef, useState } from "react"
+import { flushSync } from "react-dom"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { usePostsContext } from "@/lib/hooks"
 import { type PostIdProp } from "@/lib/types"
@@ -35,7 +36,10 @@ export function EditPost({ postId }: PostIdProp) {
         <DialogHeader>
           <DialogTitle>Edit post</DialogTitle>
         </DialogHeader>
-        <PostForm actionType="edit" onFormSubmission={() => setIsDialogOpen(false)} />
+        <PostForm
+          actionType="edit"
+          onFormSubmission={() => flushSync(() => setIsDialogOpen(false))}
+        />
       </DialogContent>
     </Dialog>
   )

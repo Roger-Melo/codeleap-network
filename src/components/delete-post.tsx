@@ -1,6 +1,7 @@
 "use client"
 
-import { type ComponentPropsWithoutRef, forwardRef } from "react"
+import { type ComponentPropsWithoutRef, forwardRef, useState } from "react"
+import { flushSync } from "react-dom"
 import { AlertDialogAction, AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { type PostIdProp } from "@/lib/types"
 import { usePostsContext } from "@/lib/hooks"
@@ -14,9 +15,16 @@ const DeleteIcon = forwardRef<SVGSVGElement, ComponentPropsWithoutRef<"svg">>((p
 DeleteIcon.displayName = "DeleteIcon"
 
 export function DeletePost({ postId }: PostIdProp) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { handleDeletePost } = usePostsContext()
+
+  async function handleClickDelete() {
+    flushSync(() => setIsDialogOpen(false))
+    await handleDeletePost(postId)
+  }
+
   return (
-    <AlertDialog >
+    <AlertDialog open={isDialogOpen} onOpenChange={(open) => setIsDialogOpen(open)}>
       <AlertDialogTrigger asChild>
         <DeleteIcon />
       </AlertDialogTrigger>
@@ -31,7 +39,7 @@ export function DeletePost({ postId }: PostIdProp) {
           <AlertDialogCancel className="py-5 hover:cursor-pointer border-primary-dark-gray sm:w-32">
             Cancel
           </AlertDialogCancel>
-          <AlertDialogAction onClick={async () => await handleDeletePost(postId)} className="bg-primary-red py-5 hover:cursor-pointer hover:bg-primary-red/90 sm:w-32">
+          <AlertDialogAction onClick={handleClickDelete} className="bg-primary-red py-5 hover:cursor-pointer hover:bg-primary-red/90 sm:w-32">
             Delete
           </AlertDialogAction>
         </AlertDialogFooter>
