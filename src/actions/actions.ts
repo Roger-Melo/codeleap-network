@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { type Post, type EditedPostToApi, type AddedPostToApi } from "@/lib/types"
+import { type EditedPostToApi, type AddedPostToApi } from "@/lib/types"
 import { baseUrl, delay } from "@/lib/utils"
 
 export async function addPost(newPost: AddedPostToApi) {

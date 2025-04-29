@@ -3,6 +3,7 @@
 import { createContext, useOptimistic, useState } from "react"
 import { type Post, type EditedPostToApi, type AddedPostToApi } from "@/lib/types"
 import { addPost, editPost, deletePost } from "@/actions/actions"
+import { generateTempTimestamp } from "@/lib/utils"
 
 type PostsContextType = {
   posts: Post[]
@@ -23,7 +24,9 @@ type PostsContextProviderProps = {
 export const PostsContext = createContext<PostsContextType | null>(null)
 
 export function PostsContextProvider({ data, children }: PostsContextProviderProps) {
-  const [optimisticPosts, setOptimisticPosts] = useOptimistic(data)
+  const [optimisticPosts, setOptimisticPosts] = useOptimistic(data, (state, newPost) => {
+    return [newPost, ...state]
+  })
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null)
 
   const selectedPost = optimisticPosts.find((post) => post.id === selectedPostId)
@@ -37,6 +40,13 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
   }
 
   async function handleAddPost(newPost: AddedPostToApi) {
+    const tempPostToOtimisticUI = {
+      ...newPost,
+      id: Math.random(),
+      created_datetime: generateTempTimestamp()
+    }
+
+    setOptimisticPosts(tempPostToOtimisticUI)
     const error = await addPost(newPost)
     if (error) {
       alert(error.message)
