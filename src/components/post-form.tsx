@@ -1,5 +1,6 @@
 "use client"
 
+import { useForm } from "react-hook-form"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -16,8 +17,14 @@ function PostFormHeading() {
   return <h2 className="text-lg sm:text-xl font-bold">What’s on your mind?</h2>
 }
 
+type PostFormType = {
+  title: string
+  content: string
+}
+
 export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   const { selectedPost, selectedPostId, handleAddPost, handleEditPost } = usePostsContext()
+  const { register, formState: { errors } } = useForm<PostFormType>()
 
   async function handleFormSubmittion(formData: FormData) {
     const post = {
@@ -43,26 +50,23 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
           <div className="space-y-3">
             <Label className="font-normal" htmlFor="title">Title</Label>
             <Input
-              required
               id="title"
-              name="title"
-              type="text"
+              {...register("title")}
               placeholder="Hello world"
-              defaultValue={actionType === "edit" ? selectedPost?.title : ""}
               autoFocus
               className="border-primary-darkest-gray"
             />
+            {errors.title && <p className="text-primary-red">{errors.title.message}</p>}
           </div>
           <div className="space-y-3">
             <Label className="font-normal" htmlFor="content">Content</Label>
             <Textarea
-              required
               id="content"
-              name="content"
+              {...register("content")}
               placeholder="Content here"
-              defaultValue={actionType === "edit" ? selectedPost?.content : ""}
               className="border-primary-darkest-gray"
             />
+            {errors.content && <p className="text-primary-red">{errors.content.message}</p>}
           </div>
         </div>
         <PostFormFooter actionType={actionType} />
