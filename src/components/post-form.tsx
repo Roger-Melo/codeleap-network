@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -15,10 +16,6 @@ type PostFormProps = {
   onFormSubmission?: () => void
 }
 
-function PostFormHeading() {
-  return <h2 className="text-lg sm:text-xl font-bold">What’s on your mind?</h2>
-}
-
 type PostFormType = {
   title: string
   content: string
@@ -29,23 +26,34 @@ const postSchema = z.object({
   content: z.string().trim().min(1, { message: "Content is required" }),
 })
 
+function PostFormHeading() {
+  return <h2 className="text-lg sm:text-xl font-bold">What’s on your mind?</h2>
+}
+
 export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   const { selectedPost, selectedPostId, handleAddPost, handleEditPost } = usePostsContext()
-  const { register, trigger, formState: { errors } } = useForm<PostFormType>({
+  const { register, trigger, setValue, formState: { errors } } = useForm<PostFormType>({
     resolver: zodResolver(postSchema)
   })
+  const [formDataState, setFormDataState] = useState<PostFormType>({ title: "", content: "" })
+
+  useEffect(() => {
+    setValue("title", formDataState.title)
+    setValue("content", formDataState.content)
+  }, [formDataState, setValue])
 
   async function handleFormSubmittion(formData: FormData) {
     const result = await trigger()
+    const title = formData.get("title") as string
+    const content = formData.get("content") as string
+
+    setFormDataState({ title, content })
+
     if (!result) {
       return
     }
 
-    const post = {
-      title: formData.get("title") as string,
-      content: formData.get("content") as string,
-    }
-
+    const post = { title, content }
     if (actionType === "edit" && onFormSubmission) {
       onFormSubmission()
       await handleEditPost(post, selectedPostId as Post["id"])
@@ -54,7 +62,14 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
 
     const newPost = { ...post, username: "ABC123" }
     await handleAddPost(newPost)
+    setFormDataState({ title: "", content: "" })
   }
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFormDataState((prev) => ({ ...prev, title: e.target.value }))
+
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+    setFormDataState((prev) => ({ ...prev, content: e.target.value }))
 
   return (
     <>
@@ -65,7 +80,8 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
             <Label className="font-normal" htmlFor="title">Title</Label>
             <Input
               id="title"
-              {...register("title")}
+              value={formDataState.title}
+              {...register("title", { required: "Title is required", onChange: handleTitleChange })}
               placeholder="Hello world"
               autoFocus
               className="border-primary-darkest-gray"
@@ -76,7 +92,8 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
             <Label className="font-normal" htmlFor="content">Content</Label>
             <Textarea
               id="content"
-              {...register("content")}
+              value={formDataState.content}
+              {...register("content", { required: "Content is required", onChange: handleContentChange })}
               placeholder="Content here"
               className="border-primary-darkest-gray"
             />
