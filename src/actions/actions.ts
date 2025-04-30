@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { type EditedPostToApi, type AddedPostToApi } from "@/lib/types"
+import { type EditedPostToApi, type AddedPostToApi, type Post } from "@/lib/types"
 import { baseUrl, delay } from "@/lib/utils"
 
 export async function addPost(newPost: AddedPostToApi) {
@@ -31,7 +31,7 @@ export async function addPost(newPost: AddedPostToApi) {
   revalidatePath("/feed", "layout")
 }
 
-export async function editPost(editedData: EditedPostToApi, selectedPostId: number) {
+export async function editPost(editedData: EditedPostToApi, selectedPostId: Post["id"]) {
   const failMessage = { message: "Could not edit post. Please, try again in a few minutes." }
   try {
     await delay(1000)
@@ -51,7 +51,7 @@ export async function editPost(editedData: EditedPostToApi, selectedPostId: numb
   revalidatePath("/feed", "layout")
 }
 
-export async function deletePost(postId: number) {
+export async function deletePost(postId: Post["id"]) {
   const failMessage = { message: "Could not delete post. Please, try again in a few minutes." }
   try {
     await delay(1000)

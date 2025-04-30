@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { PostFormFooter } from "./post-form-footer"
 import { usePostsContext } from "@/lib/hooks"
-import { type ActionTypes } from "@/lib/types"
+import { type ActionTypes, type Post } from "@/lib/types"
 
 type PostFormProps = {
   actionType: ActionTypes
@@ -27,7 +27,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
 
     if (actionType === "edit" && onFormSubmission) {
       onFormSubmission()
-      await handleEditPost(post, selectedPostId as number)
+      await handleEditPost(post, selectedPostId as Post["id"])
       return
     }
 

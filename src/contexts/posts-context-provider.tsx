@@ -7,12 +7,12 @@ import { generateTempTimestamp, alertIfError } from "@/lib/utils"
 
 type PostsContextType = {
   posts: Post[]
-  selectedPostId: number | null
+  selectedPostId: Post["id"] | null
   selectedPost: Post | undefined
-  handleSelectPost: (id: number) => void
+  handleSelectPost: (id: Post["id"]) => void
   handleUnselectPost: () => void
-  handleDeletePost: (id: number) => Promise<void>
-  handleEditPost: (editedData: EditedPostToApi, selectedPostId: number) => Promise<void>
+  handleDeletePost: (id: Post["id"]) => Promise<void>
+  handleEditPost: (editedData: EditedPostToApi, selectedPostId: Post["id"]) => Promise<void>
   handleAddPost: (newPost: AddedPostToApi) => Promise<void>
 }
 
@@ -45,11 +45,11 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
 
     return state
   })
-  const [selectedPostId, setSelectedPostId] = useState<number | null>(null)
+  const [selectedPostId, setSelectedPostId] = useState<Post["id"] | null>(null)
 
   const selectedPost = optimisticPosts.find((post) => post.id === selectedPostId)
 
-  function handleSelectPost(id: number) {
+  function handleSelectPost(id: Post["id"]) {
     setSelectedPostId(id)
   }
 
@@ -63,7 +63,7 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
     alertIfError(error)
   }
 
-  async function handleDeletePost(id: number) {
+  async function handleDeletePost(id: Post["id"]) {
     // startTransition because there's no form action to delete a post
     startTransition(() => setOptimisticPosts({ action: "delete", payload: { id } }))
     const error = await deletePost(id)
@@ -71,7 +71,7 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
     setSelectedPostId(null)
   }
 
-  async function handleEditPost(editedData: EditedPostToApi, selectedPostId: number) {
+  async function handleEditPost(editedData: EditedPostToApi, selectedPostId: Post["id"]) {
     setOptimisticPosts({ action: "edit", payload: { editedData, selectedPostId } })
     const error = await editPost(editedData, selectedPostId)
     alertIfError(error)
