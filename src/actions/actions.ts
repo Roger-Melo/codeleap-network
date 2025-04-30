@@ -24,7 +24,7 @@ export async function addPost(newPost: AddedPostToApi) {
     if (postWasNotReallyCreatedOnDb) {
       return failMessage
     }
-  } catch (error) {
+  } catch {
     return failMessage
   }
 
@@ -44,7 +44,7 @@ export async function editPost(editedData: EditedPostToApi, selectedPostId: Post
     if (!response.ok) {
       return failMessage
     }
-  } catch (error) {
+  } catch {
     return failMessage
   }
 
@@ -64,7 +64,7 @@ export async function deletePost(postId: Post["id"]) {
     if (!response.ok) {
       return failMessage
     }
-  } catch (error) {
+  } catch {
     return failMessage
   }
 

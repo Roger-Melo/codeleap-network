@@ -13,7 +13,7 @@ type PostFormProps = {
 }
 
 function PostFormHeading() {
-  return <h2 className="text-lg sm:text-xl font-bold">"What’s on your mind?"</h2>
+  return <h2 className="text-lg sm:text-xl font-bold">What’s on your mind?</h2>
 }
 
 export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
