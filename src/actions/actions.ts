@@ -2,7 +2,7 @@
 
 import { z } from "zod"
 import { revalidatePath } from "next/cache"
-import { type EditedPostToApi, type AddedPostToApi, type Post, postFormSchema } from "@/lib/types"
+import { postFormSchema } from "@/lib/types"
 import { baseUrl, delay } from "@/lib/utils"
 
 const addedPostToApiSchema = postFormSchema.extend({ username: z.string() })
@@ -39,14 +39,22 @@ export async function addPost(newPost: unknown) {
   revalidatePath("/feed", "layout")
 }
 
+const selectedPostIdSchema = z.number()
+
 export async function editPost(editedData: unknown, selectedPostId: unknown) {
   const failMessage = { message: "Could not edit post. Please, try again in a few minutes." }
   try {
     await delay(1000)
-    const response = await fetch(`${baseUrl}${selectedPostId}/`, {
+    const validatedEditedData = postFormSchema.safeParse(editedData)
+    const validatedSelectedPostId = selectedPostIdSchema.safeParse(selectedPostId)
+    if (!validatedEditedData.success || !validatedSelectedPostId.success) {
+      return { message: "Invalid edited post data." }
+    }
+
+    const response = await fetch(`${baseUrl}${validatedSelectedPostId.data}/`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(editedData)
+      body: JSON.stringify(validatedEditedData.data)
     })
 
     if (!response.ok) {

@@ -25,7 +25,11 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   const { register, trigger, setValue, getValues, formState: { errors } } = useForm<PostFormType>({
     resolver: zodResolver(postFormSchema)
   })
-  const [formDataState, setFormDataState] = useState<PostFormType>({ title: "", content: "" })
+  const [formDataState, setFormDataState] = useState<PostFormType>(
+    actionType === "edit" && selectedPost
+      ? { title: selectedPost.title, content: selectedPost.content }
+      : { title: "", content: "" }
+  )
 
   useEffect(() => {
     setValue("title", formDataState.title)
@@ -44,11 +48,11 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
     if (actionType === "edit" && onFormSubmission) {
       onFormSubmission()
       await handleEditPost(post, selectedPostId as Post["id"])
-      return
+    } else if (actionType === "add") {
+      const newPost = { ...post, username: "ABC123" }
+      await handleAddPost(newPost)
     }
 
-    const newPost = { ...post, username: "ABC123" }
-    await handleAddPost(newPost)
     setFormDataState({ title: "", content: "" })
   }
 
