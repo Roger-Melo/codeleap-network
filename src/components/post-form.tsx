@@ -1,5 +1,7 @@
 "use client"
 
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -22,11 +24,23 @@ type PostFormType = {
   content: string
 }
 
+const postSchema = z.object({
+  title: z.string().trim().min(1, { message: "Title is required" }),
+  content: z.string().trim().min(1, { message: "Content is required" }),
+})
+
 export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   const { selectedPost, selectedPostId, handleAddPost, handleEditPost } = usePostsContext()
-  const { register, formState: { errors } } = useForm<PostFormType>()
+  const { register, trigger, formState: { errors } } = useForm<PostFormType>({
+    resolver: zodResolver(postSchema)
+  })
 
   async function handleFormSubmittion(formData: FormData) {
+    const result = await trigger()
+    if (!result) {
+      return
+    }
+
     const post = {
       title: formData.get("title") as string,
       content: formData.get("content") as string,
