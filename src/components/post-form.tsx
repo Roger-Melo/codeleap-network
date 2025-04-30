@@ -1,5 +1,6 @@
 "use client"
 
+// import { useActionState } from "react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -18,6 +19,7 @@ function PostFormHeading() {
 
 export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   const { selectedPost, selectedPostId, handleAddPost, handleEditPost } = usePostsContext()
+  // const [state, formAction, pending] = useActionState(createUser, initialState)
 
   async function handleFormSubmittion(formData: FormData) {
     const post = {
@@ -43,7 +45,6 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
           <div className="space-y-3">
             <Label className="font-normal" htmlFor="title">Title</Label>
             <Input
-              required
               id="title"
               name="title"
               type="text"
@@ -56,7 +57,6 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
           <div className="space-y-3">
             <Label className="font-normal" htmlFor="content">Content</Label>
             <Textarea
-              required
               id="content"
               name="content"
               placeholder="Content here"

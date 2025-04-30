@@ -1,10 +1,22 @@
 "use server"
 
+import { z } from "zod"
 import { revalidatePath } from "next/cache"
 import { type EditedPostToApi, type AddedPostToApi, type Post } from "@/lib/types"
 import { baseUrl, delay } from "@/lib/utils"
 
+const addPostSchema = z.object({
+  title: z.string().trim().min(1, { message: "Title is required" }),
+  content: z.string().trim().min(1, { message: "Content is required" }),
+})
+
 export async function addPost(newPost: AddedPostToApi) {
+  console.log("executou action addPost:", newPost)
+  const validatedNewPost = addPostSchema.safeParse(newPost)
+  if (!validatedNewPost.success) {
+    return { message: "Please, fill in all fields." }
+  }
+  /*
   const failMessage = { message: "Could not add post. Please, try again in a few minutes." }
   try {
     await delay(1000)
@@ -29,6 +41,7 @@ export async function addPost(newPost: AddedPostToApi) {
   }
 
   revalidatePath("/feed", "layout")
+  */
 }
 
 export async function editPost(editedData: EditedPostToApi, selectedPostId: Post["id"]) {
