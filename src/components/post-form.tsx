@@ -16,15 +16,12 @@ type PostFormProps = {
   onFormSubmission?: () => void
 }
 
-type PostFormType = {
-  title: string
-  content: string
-}
-
 const postSchema = z.object({
   title: z.string().trim().min(1, { message: "Title is required" }),
   content: z.string().trim().min(1, { message: "Content is required" }),
 })
+
+type PostFormType = z.infer<typeof postSchema>
 
 function PostFormHeading() {
   return <h2 className="text-lg sm:text-xl font-bold">What’s on your mind?</h2>
