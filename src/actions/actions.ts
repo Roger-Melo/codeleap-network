@@ -39,7 +39,7 @@ export async function addPost(newPost: unknown) {
   revalidatePath("/feed", "layout")
 }
 
-export async function editPost(editedData: EditedPostToApi, selectedPostId: Post["id"]) {
+export async function editPost(editedData: unknown, selectedPostId: unknown) {
   const failMessage = { message: "Could not edit post. Please, try again in a few minutes." }
   try {
     await delay(1000)
@@ -59,7 +59,7 @@ export async function editPost(editedData: EditedPostToApi, selectedPostId: Post
   revalidatePath("/feed", "layout")
 }
 
-export async function deletePost(postId: Post["id"]) {
+export async function deletePost(postId: unknown) {
   const failMessage = { message: "Could not delete post. Please, try again in a few minutes." }
   try {
     await delay(1000)
