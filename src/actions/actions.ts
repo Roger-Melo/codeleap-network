@@ -7,7 +7,7 @@ import { baseUrl, delay } from "@/lib/utils"
 export async function addPost(newPost: AddedPostToApi) {
   const failMessage = { message: "Could not add post. Please, try again in a few minutes." }
   try {
-    await delay(2000)
+    await delay(1000)
     const response = await fetch(baseUrl, {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -34,7 +34,7 @@ export async function addPost(newPost: AddedPostToApi) {
 export async function editPost(editedData: EditedPostToApi, selectedPostId: number) {
   const failMessage = { message: "Could not edit post. Please, try again in a few minutes." }
   try {
-    await delay(2000)
+    await delay(1000)
     const response = await fetch(`${baseUrl}${selectedPostId}/`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
@@ -54,7 +54,7 @@ export async function editPost(editedData: EditedPostToApi, selectedPostId: numb
 export async function deletePost(postId: number) {
   const failMessage = { message: "Could not delete post. Please, try again in a few minutes." }
   try {
-    await delay(2000)
+    await delay(1000)
     const response = await fetch(`${baseUrl}${postId}/`, {
       method: "DELETE",
       headers: { "content-type": "application/json" },
