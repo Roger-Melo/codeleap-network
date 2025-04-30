@@ -9,19 +9,12 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { PostFormFooter } from "./post-form-footer"
 import { usePostsContext } from "@/lib/hooks"
-import { type ActionTypes, type Post } from "@/lib/types"
+import { type ActionTypes, type Post, type PostFormType, postFormSchema } from "@/lib/types"
 
 type PostFormProps = {
   actionType: ActionTypes
   onFormSubmission?: () => void
 }
-
-const postSchema = z.object({
-  title: z.string().trim().min(1, { message: "Title is required" }),
-  content: z.string().trim().min(1, { message: "Content is required" }),
-})
-
-type PostFormType = z.infer<typeof postSchema>
 
 function PostFormHeading() {
   return <h2 className="text-lg sm:text-xl font-bold">What’s on your mind?</h2>
@@ -29,8 +22,8 @@ function PostFormHeading() {
 
 export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   const { selectedPost, selectedPostId, handleAddPost, handleEditPost } = usePostsContext()
-  const { register, trigger, setValue, formState: { errors } } = useForm<PostFormType>({
-    resolver: zodResolver(postSchema)
+  const { register, trigger, setValue, getValues, formState: { errors } } = useForm<PostFormType>({
+    resolver: zodResolver(postFormSchema)
   })
   const [formDataState, setFormDataState] = useState<PostFormType>({ title: "", content: "" })
 
@@ -39,18 +32,15 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
     setValue("content", formDataState.content)
   }, [formDataState, setValue])
 
-  async function handleFormSubmittion(formData: FormData) {
+  async function handleFormSubmittion() {
     const result = await trigger()
-    const title = formData.get("title") as string
-    const content = formData.get("content") as string
-
-    setFormDataState({ title, content })
+    const post = getValues()
+    setFormDataState(post)
 
     if (!result) {
       return
     }
 
-    const post = { title, content }
     if (actionType === "edit" && onFormSubmission) {
       onFormSubmission()
       await handleEditPost(post, selectedPostId as Post["id"])

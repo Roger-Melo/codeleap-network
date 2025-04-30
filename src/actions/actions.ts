@@ -1,17 +1,25 @@
 "use server"
 
+import { z } from "zod"
 import { revalidatePath } from "next/cache"
-import { type EditedPostToApi, type AddedPostToApi, type Post } from "@/lib/types"
+import { type EditedPostToApi, type AddedPostToApi, type Post, postFormSchema } from "@/lib/types"
 import { baseUrl, delay } from "@/lib/utils"
 
-export async function addPost(newPost: AddedPostToApi) {
+const addedPostToApiSchema = postFormSchema.extend({ username: z.string() })
+
+export async function addPost(newPost: unknown) {
   const failMessage = { message: "Could not add post. Please, try again in a few minutes." }
   try {
     await delay(1000)
+    const validatedNewPost = addedPostToApiSchema.safeParse(newPost)
+    if (!validatedNewPost.success) {
+      return { message: "Invalid post data." }
+    }
+
     const response = await fetch(baseUrl, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(newPost)
+      body: JSON.stringify(validatedNewPost.data)
     })
 
     if (!response.ok) {
