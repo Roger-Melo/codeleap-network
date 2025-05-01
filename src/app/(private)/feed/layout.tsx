@@ -1,7 +1,6 @@
 import { postsDataSchema } from "@/lib/types"
-import { PostsContextProvider } from "@/contexts/posts-context-provider"
 import { baseUrl } from "@/lib/utils"
-import { ClientProtection } from "@/components/client-protection"
+import { FeedClientWrapper } from "@/components/feed-client-wrapper"
 
 function PageErrorMessage() {
   return (
@@ -22,12 +21,6 @@ export default async function FeedLayout({ children }: FeedLayoutProps) {
   const data: unknown = await response.json()
   const validatedData = postsDataSchema.safeParse(data)
   return validatedData.success
-    ? (
-      <PostsContextProvider data={validatedData.data.results}>
-        <ClientProtection>
-          {children}
-        </ClientProtection>
-      </PostsContextProvider>
-    )
+    ? <FeedClientWrapper data={validatedData.data.results}>{children}</FeedClientWrapper>
     : <PageErrorMessage />
 }
