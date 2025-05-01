@@ -5,6 +5,24 @@ import { revalidatePath } from "next/cache"
 import { postFormSchema } from "@/lib/types"
 import { baseUrl, delay } from "@/lib/utils"
 
+const usernameSchema = z.string()
+
+export async function setUsernameAction(username: unknown) {
+  try {
+    const validatedUsername = usernameSchema.safeParse(username)
+    if (!validatedUsername.success) {
+      return { error: true, errorMessage: "Invalid username." }
+    }
+
+    return { username: validatedUsername.data }
+  } catch {
+    return {
+      error: true,
+      errorMessage: "Could not set username. Please, try again in a few minutes."
+    }
+  }
+}
+
 const addedPostToApiSchema = postFormSchema.extend({ username: z.string() })
 
 export async function addPostAction(newPost: unknown) {
