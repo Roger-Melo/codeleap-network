@@ -7,7 +7,7 @@ import { baseUrl, delay } from "@/lib/utils"
 
 const addedPostToApiSchema = postFormSchema.extend({ username: z.string() })
 
-export async function addPost(newPost: unknown) {
+export async function addPostAction(newPost: unknown) {
   const failMessage = { message: "Could not add post. Please, try again in a few minutes." }
   try {
     await delay(1000)
@@ -41,7 +41,7 @@ export async function addPost(newPost: unknown) {
 
 const postIdSchema = z.number()
 
-export async function editPost(editedData: unknown, postId: unknown) {
+export async function editPostAction(editedData: unknown, postId: unknown) {
   const failMessage = { message: "Could not edit post. Please, try again in a few minutes." }
   try {
     await delay(1000)
@@ -67,7 +67,7 @@ export async function editPost(editedData: unknown, postId: unknown) {
   revalidatePath("/feed", "layout")
 }
 
-export async function deletePost(postId: unknown) {
+export async function deletePostAction(postId: unknown) {
   const failMessage = { message: "Could not delete post. Please, try again in a few minutes." }
   try {
     await delay(1000)

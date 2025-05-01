@@ -2,7 +2,7 @@
 
 import { createContext, useOptimistic, useState, startTransition } from "react"
 import { type Post, type EditedPostToApi, type AddedPostToApi } from "@/lib/types"
-import { addPost, editPost, deletePost } from "@/actions/actions"
+import { addPostAction, editPostAction, deletePostAction } from "@/actions/actions"
 import { generateTempTimestamp, alertIfError } from "@/lib/utils"
 
 type PostsContextType = {
@@ -59,21 +59,21 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
 
   async function handleAddPost(newPost: AddedPostToApi) {
     setOptimisticPosts({ action: "add", payload: newPost })
-    const error = await addPost(newPost)
+    const error = await addPostAction(newPost)
     alertIfError(error)
   }
 
   async function handleDeletePost(id: Post["id"]) {
     // startTransition because there's no form action to delete a post
     startTransition(() => setOptimisticPosts({ action: "delete", payload: { id } }))
-    const error = await deletePost(id)
+    const error = await deletePostAction(id)
     alertIfError(error)
     setSelectedPostId(null)
   }
 
   async function handleEditPost(editedData: EditedPostToApi, selectedPostId: Post["id"]) {
     setOptimisticPosts({ action: "edit", payload: { editedData, selectedPostId } })
-    const error = await editPost(editedData, selectedPostId)
+    const error = await editPostAction(editedData, selectedPostId)
     alertIfError(error)
   }
 
