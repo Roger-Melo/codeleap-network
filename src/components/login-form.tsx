@@ -24,6 +24,7 @@ export function LoginForm() {
           autoFocus
           className="border-primary-darkest-gray"
         />
+        <small>It should have between 2 and 20 characters</small>
       </div>
       <Button
         disabled={usernameFieldState === ""}
