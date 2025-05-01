@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { PostFormFooter } from "./post-form-footer"
-import { usePostsContext } from "@/lib/hooks"
+import { usePostsContext, useUsernameContext } from "@/lib/hooks"
 import { type ActionTypes, type Post, type PostFormType, postFormSchema } from "@/lib/types"
 
 type PostFormProps = {
@@ -23,6 +23,7 @@ const emptyFormDataState = { title: "", content: "" }
 
 export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   const { selectedPost, selectedPostId, handleAddPost, handleEditPost } = usePostsContext()
+  const { usernameState } = useUsernameContext()
   const { register, trigger, setValue, getValues, formState: { errors } } = useForm<PostFormType>({
     resolver: zodResolver(postFormSchema)
   })
@@ -51,7 +52,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
       onFormSubmission()
       await handleEditPost(post, selectedPostId as Post["id"])
     } else if (actionType === "add") {
-      const newPost = { ...post, username: "ABC123" }
+      const newPost = { ...post, username: usernameState }
       await handleAddPost(newPost)
     }
 

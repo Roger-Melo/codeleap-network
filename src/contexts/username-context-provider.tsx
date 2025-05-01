@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useState, useEffect } from "react"
+import { createContext, useState } from "react"
 import { getStoredUsername, setUsernameOnStorage } from "@/lib/local-storage"
 
 type UsernameContextType = {
@@ -15,12 +15,7 @@ type UsernameContextProviderProps = {
 export const UsernameContext = createContext<UsernameContextType | null>(null)
 
 export function UsernameContextProvider({ children }: UsernameContextProviderProps) {
-  const [usernameState, setUsernameState] = useState("")
-
-  useEffect(() => {
-    const storedUsername = getStoredUsername()
-    setUsernameState(storedUsername)
-  }, [])
+  const [usernameState, setUsernameState] = useState(() => getStoredUsername())
 
   function setUsername(username: string) {
     setUsernameOnStorage(username)
