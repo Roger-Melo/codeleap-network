@@ -20,6 +20,8 @@ function PostFormHeading() {
   return <h2 className="text-lg sm:text-xl font-bold">What’s on your mind?</h2>
 }
 
+const emptyFormDataState = { title: "", content: "" }
+
 export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   const { selectedPost, selectedPostId, handleAddPost, handleEditPost } = usePostsContext()
   const { register, trigger, setValue, getValues, formState: { errors } } = useForm<PostFormType>({
@@ -28,7 +30,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   const [formDataState, setFormDataState] = useState<PostFormType>(
     actionType === "edit" && selectedPost
       ? { title: selectedPost.title, content: selectedPost.content }
-      : { title: "", content: "" }
+      : emptyFormDataState
   )
 
   useEffect(() => {
@@ -53,7 +55,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
       await handleAddPost(newPost)
     }
 
-    setFormDataState({ title: "", content: "" })
+    setFormDataState(emptyFormDataState)
   }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -72,7 +74,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
             <Input
               id="title"
               value={formDataState.title}
-              {...register("title", { required: "Title is required", onChange: handleTitleChange })}
+              {...register("title", { onChange: handleTitleChange })}
               placeholder="Hello world"
               autoFocus
               className="border-primary-darkest-gray"
@@ -84,14 +86,14 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
             <Textarea
               id="content"
               value={formDataState.content}
-              {...register("content", { required: "Content is required", onChange: handleContentChange })}
+              {...register("content", { onChange: handleContentChange })}
               placeholder="Content here"
               className="border-primary-darkest-gray"
             />
             {errors.content && <p className="text-primary-red">{errors.content.message}</p>}
           </div>
         </div>
-        <PostFormFooter actionType={actionType} />
+        <PostFormFooter actionType={actionType} formDataState={formDataState} />
       </form>
     </>
   )
