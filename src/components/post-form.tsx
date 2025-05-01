@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Label } from "@/components/ui/label"
