@@ -26,6 +26,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   const { register, trigger, setValue, getValues, formState: { errors } } = useForm<PostFormType>({
     resolver: zodResolver(postFormSchema)
   })
+  // useState is necessary because React completely resets the form fields after an action submission if FE validation (disabled) is removed from PostFormFooter buttons
   const [formDataState, setFormDataState] = useState<PostFormType>(
     actionType === "edit" && selectedPost
       ? { title: selectedPost.title, content: selectedPost.content }
