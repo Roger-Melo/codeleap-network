@@ -30,7 +30,7 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
         ...payload,
         id: Math.random(),
         // temporary. only to user sees when it's created with optimistic UI
-        created_datetime: "just now"
+        created_datetime: new Date().toISOString()
       }
       return [tempPostToOptimisticUi, ...state]
     }
