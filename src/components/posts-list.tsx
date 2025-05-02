@@ -1,5 +1,6 @@
 "use client"
 
+import { Fragment } from "react"
 import { EditPost } from "./edit-post"
 import { DeletePost } from "./delete-post"
 import { usePostsContext, useUsernameContext } from "@/lib/hooks"
@@ -10,6 +11,7 @@ type PostProps = { post: Post }
 
 function Post({ post }: PostProps) {
   const { usernameState } = useUsernameContext()
+  const paragraphs = post.content.split(/\n{2,}/g)
   return (
     <li>
       <section>
@@ -33,8 +35,17 @@ function Post({ post }: PostProps) {
               </time>
             </p>
           </div>
-          <article className="text-lg flex flex-col gap-6">
-            {post.content}
+          <article className="text-lg flex flex-col gap-3">
+            {paragraphs.map((paragraph, i) =>
+              <p key={i}>
+                {paragraph.split("\n").map((line, j) => (
+                  <Fragment key={j}>
+                    {line}
+                    <br />
+                  </Fragment>
+                ))}
+              </p>
+            )}
           </article>
         </section>
       </section>
