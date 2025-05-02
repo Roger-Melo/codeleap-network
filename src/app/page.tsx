@@ -11,7 +11,6 @@ export default function Home() {
 
   useEffect(() => {
     if (usernameState) {
-      console.log("[Home] usernameState found, redirecting to /feed →", usernameState)
       router.replace("/feed")
     }
   }, [usernameState, router])

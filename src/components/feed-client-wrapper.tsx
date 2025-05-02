@@ -16,10 +16,7 @@ export function FeedClientWrapper({ data, children }: ClientProtectionProps) {
 
   useEffect(() => {
     if (!usernameState) {
-      console.log("[FeedClientWrapper] No username found. Redirecting...")
       router.replace("/")
-    } else {
-      console.log("[FeedClientWrapper] Access granted with username:", usernameState)
     }
   }, [usernameState, router])
 
