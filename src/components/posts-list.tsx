@@ -39,8 +39,21 @@ function PostInfo({ post }: PostProps) {
   )
 }
 
-function Post({ post }: PostProps) {
+function PostText({ post }: PostProps) {
   const paragraphs = post.content.split(/\n{2,}/g)
+  return paragraphs.map((paragraph, i) =>
+    <p key={i}>
+      {paragraph.split("\n").map((line, j) => (
+        <Fragment key={j}>
+          {line}
+          <br />
+        </Fragment>
+      ))}
+    </p>
+  )
+}
+
+function Post({ post }: PostProps) {
   return (
     <li>
       <section>
@@ -48,16 +61,7 @@ function Post({ post }: PostProps) {
         <section className="p-5 border border-primary-dark-gray rounded-b-2xl border-t-0 flex flex-col gap-4">
           <PostInfo post={post} />
           <article className="text-lg flex flex-col gap-3">
-            {paragraphs.map((paragraph, i) =>
-              <p key={i}>
-                {paragraph.split("\n").map((line, j) => (
-                  <Fragment key={j}>
-                    {line}
-                    <br />
-                  </Fragment>
-                ))}
-              </p>
-            )}
+            <PostText post={post} />
           </article>
         </section>
       </section>
