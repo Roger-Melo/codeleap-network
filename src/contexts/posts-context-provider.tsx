@@ -3,7 +3,7 @@
 import { createContext, useOptimistic, useState, startTransition } from "react"
 import { type Post, type EditedPostToApi, type AddedPostToApi } from "@/lib/types"
 import { addPostAction, editPostAction, deletePostAction } from "@/actions/actions"
-import { generateTempTimestamp, alertIfError } from "@/lib/utils"
+import { alertIfError } from "@/lib/utils"
 
 type PostsContextType = {
   posts: Post[]
@@ -29,7 +29,8 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
       const tempPostToOptimisticUi = {
         ...payload,
         id: Math.random(),
-        created_datetime: generateTempTimestamp()
+        // temporary. only to user sees when it's created with optimistic UI
+        created_datetime: "just now"
       }
       return [tempPostToOptimisticUi, ...state]
     }
