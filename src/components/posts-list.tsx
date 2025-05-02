@@ -8,24 +8,31 @@ import { getPostTimeCreation } from "@/lib/utils"
 import { type Post } from "@/lib/types"
 
 type PostProps = { post: Post }
+type PostHeaderProps = { post: Post }
+
+function PostHeader({ post }: PostHeaderProps) {
+  const { usernameState } = useUsernameContext()
+  return (
+    <header className="bg-primary-blue rounded-t-2xl p-5 flex flex-col gap-4 sm:flex-row sm:justify-between">
+      <h3 className="text-2xl sm:text-2xl font-bold text-white">{post.title}</h3>
+      {post.username === usernameState && (
+        <nav className="sm:flex sm:flex-col sm:justify-center">
+          <ul className="flex gap-4 sm:gap-6 justify-end">
+            <li><EditPost postId={post.id} /></li>
+            <li><DeletePost postId={post.id} /></li>
+          </ul>
+        </nav>
+      )}
+    </header>
+  )
+}
 
 function Post({ post }: PostProps) {
-  const { usernameState } = useUsernameContext()
   const paragraphs = post.content.split(/\n{2,}/g)
   return (
     <li>
       <section>
-        <header className="bg-primary-blue rounded-t-2xl p-5 flex flex-col gap-4 sm:flex-row sm:justify-between">
-          <h3 className="text-2xl sm:text-2xl font-bold text-white">{post.title}</h3>
-          {post.username === usernameState && (
-            <nav className="sm:flex sm:flex-col sm:justify-center">
-              <ul className="flex gap-4 sm:gap-6 justify-end">
-                <li><EditPost postId={post.id} /></li>
-                <li><DeletePost postId={post.id} /></li>
-              </ul>
-            </nav>
-          )}
-        </header>
+        <PostHeader post={post} />
         <section className="p-5 border border-primary-dark-gray rounded-b-2xl border-t-0 flex flex-col gap-4">
           <div className="text-lg text-primary-darkest-gray sm:flex sm:justify-between sm:items-center">
             <h4 className="font-bold">@{post.username}</h4>
