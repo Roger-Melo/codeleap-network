@@ -3,6 +3,7 @@
 import { EditPost } from "./edit-post"
 import { DeletePost } from "./delete-post"
 import { usePostsContext, useUsernameContext } from "@/lib/hooks"
+import { getPostTimeCreation } from "@/lib/utils"
 import { type Post } from "@/lib/types"
 
 type PostProps = { post: Post }
@@ -24,10 +25,12 @@ function Post({ post }: PostProps) {
           )}
         </header>
         <section className="p-5 border border-primary-dark-gray rounded-b-2xl border-t-0 flex flex-col gap-4">
-          <div className="text-lg text-primary-darkest-gray sm:flex sm:justify-between">
+          <div className="text-lg text-primary-darkest-gray sm:flex sm:justify-between sm:items-center">
             <h4 className="font-bold">@{post.username}</h4>
-            <p>
-              <time>{post.created_datetime}</time> minutes ago
+            <p className="text-xs sm:text-sm">
+              <time dateTime={post.created_datetime}>
+                {getPostTimeCreation(post.created_datetime)}
+              </time>
             </p>
           </div>
           <article className="text-lg flex flex-col gap-6">
