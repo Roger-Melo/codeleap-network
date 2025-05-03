@@ -1,4 +1,3 @@
-import { useFormStatus } from "react-dom"
 import { Button } from "@/components/ui/button"
 import { DialogClose } from "@/components/ui/dialog"
 import { type ActionTypes, type PostFormType } from "@/lib/types"
@@ -9,13 +8,12 @@ type PostFormFooterProps = {
 }
 
 export function PostFormFooter({ actionType, formDataState }: PostFormFooterProps) {
-  const { pending } = useFormStatus()
   const isSomeFieldEmpty = Object.values(formDataState).some((fieldValue) => fieldValue === "")
   return actionType === "add"
     ? (
       <div className="flex">
         <Button
-          disabled={pending || isSomeFieldEmpty}
+          disabled={isSomeFieldEmpty}
           type="submit"
           className="bg-primary-blue ml-auto hover:bg-primary-acqua"
         >

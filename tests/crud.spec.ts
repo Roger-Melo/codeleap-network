@@ -17,21 +17,25 @@ async function awaitFiveSeconds(page: Page) {
   await page.waitForTimeout(5_000)
 }
 
-async function createPost({ post, page }: CommonPostProps) {
+async function createPosts(page: Page) {
   const inputTitle = page.getByLabel("Title")
   const textAreaContent = page.getByLabel("Content")
   const buttonCreatePost = page.getByRole("button", { name: "Create" })
-  await inputTitle.fill(post.title)
-  await textAreaContent.fill(post.content)
-  await buttonCreatePost.click()
+  for (const post of posts) {
+    await inputTitle.fill(post.title)
+    await textAreaContent.fill(post.content)
+    await buttonCreatePost.click()
+  }
 }
 
-async function checkCreatedPost({ post, page }: CommonPostProps) {
-  await awaitFiveSeconds(page)
-  await expect(page.getByRole("heading", { name: post.title })).toBeVisible()
-  const firstPostParagraphs = post.content.split("\n\n")
-  await expect(page.getByRole("listitem").filter({ hasText: firstPostParagraphs[0] })).toBeVisible()
-  await expect(page.getByRole("listitem").filter({ hasText: firstPostParagraphs[1] })).toBeVisible()
+async function checkCreatedPosts(page: Page) {
+  for (const post of posts) {
+    const postTitle = page.getByRole("heading", { name: post.title })
+    await expect(postTitle).toBeVisible()
+    const postParagraphs = post.content.split("\n\n")
+    await expect(page.getByRole("listitem").filter({ hasText: postParagraphs[0] })).toBeVisible()
+    await expect(page.getByRole("listitem").filter({ hasText: postParagraphs[1] })).toBeVisible()
+  }
 }
 
 test.beforeEach("Access /feed", async ({ page }) => {
@@ -42,11 +46,47 @@ test.beforeEach("Access /feed", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "CodeLeap Network" })).toBeVisible()
 })
 
-test.describe("New post", () => {
+test.describe("Post creation", () => {
   test("Create posts on posts list", async ({ page }) => {
-    for (const post of posts) {
-      await createPost({ post, page })
-      await checkCreatedPost({ post, page })
-    }
+    await createPosts(page)
+    await awaitFiveSeconds(page)
+    await checkCreatedPosts(page)
   })
 })
+
+/*
+async function deletePost({ post, page }: CommonPostProps) {
+  const selectedPost = page.getByRole("listitem").filter({ hasText: post.title })
+  await selectedPost.getByTestId("deletePost").click()
+  const deleteButton = page.getByRole("button", { name: "Delete" })
+  deleteButton.click()
+return selectedPost
+}
+
+async function checkDeletedPost({ selectedPost, page }: { selectedPost: Locator, page: Page }) {
+  await awaitFiveSeconds(page)
+  await expect(selectedPost).not.toBeVisible()
+}
+
+test.describe("Post deletion", () => {
+  test("Delete posts from posts list", async ({ page }) => {
+    for (const post of posts) {
+      await createPost({ post, page })
+    }
+    await awaitFiveSeconds(page)
+    await checkCreatedPost({ post: posts[0], page })
+    await checkCreatedPost({ post: posts[1], page })
+    await checkCreatedPost({ post: posts[2], page })
+
+    for (const post of posts) {
+      await deletePost({ post, page })
+const selectedPost = await deletePost({ post, page })
+await checkDeletedPost({ selectedPost, page })
+    }
+    await awaitFiveSeconds(page)
+    await expect(page.getByRole("listitem")).not.toHaveText(posts[0].title)
+    await expect(page.getByRole("listitem")).not.toHaveText(posts[1].title)
+    await expect(page.getByRole("listitem")).not.toHaveText(posts[2].title)
+  })
+})
+*/
