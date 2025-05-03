@@ -1,4 +1,3 @@
-import { type PostFormType } from "@/lib/types"
 import { test, expect, type Page } from "@playwright/test"
 
 const posts = [
@@ -14,10 +13,9 @@ async function awaitFiveSeconds(page: Page) {
 
 async function deletePosts(page: Page) {
   for (const post of posts) {
-    const selectedPost = page.getByRole("listitem").filter({ hasText: post.title })
+    const selectedPost = page.getByRole("listitem").filter({ hasText: post.title }).first()
     await selectedPost.getByTestId("deletePost").click()
-    const deleteButton = page.getByRole("button", { name: "Delete" })
-    deleteButton.click()
+    await page.getByRole("button", { name: "Delete" }).click()
   }
   await checkDeletedPosts(page)
 }
@@ -44,11 +42,11 @@ async function createPosts(page: Page) {
 async function checkCreatedPosts(page: Page) {
   await awaitFiveSeconds(page)
   for (const post of posts) {
-    const postTitle = page.getByRole("heading", { name: post.title })
-    await expect(postTitle).toBeVisible()
-    const postParagraphs = post.content.split("\n\n")
-    await expect(page.getByRole("listitem").filter({ hasText: postParagraphs[0] })).toBeVisible()
-    await expect(page.getByRole("listitem").filter({ hasText: postParagraphs[1] })).toBeVisible()
+    const postItem = page.getByRole("listitem").filter({ hasText: post.title }).first()
+    await expect(postItem.getByRole("heading", { name: post.title })).toBeVisible()
+    const [firstParagraph, secondParagraph] = post.content.split("\n\n")
+    await expect(postItem).toContainText(firstParagraph)
+    await expect(postItem).toContainText(secondParagraph)
   }
 }
 
@@ -63,6 +61,7 @@ test.beforeEach("Access /feed", async ({ page }) => {
 test.describe("Post creation", () => {
   test("Create posts on posts list", async ({ page }) => {
     await createPosts(page)
+    await deletePosts(page)
   })
 })
 
