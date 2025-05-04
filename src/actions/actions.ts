@@ -45,6 +45,8 @@ export async function addPostAction(newPost: unknown) {
     }
 
     const data = await response.json()
+    console.log("response:", response)
+    console.log("data:", data)
     // at the time of this writing, a post object that wasn't created on db don't have these properties
     const postWasNotReallyCreatedOnDb = !data.id || !data.created_datetime
     if (postWasNotReallyCreatedOnDb) {
