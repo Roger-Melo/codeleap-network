@@ -29,7 +29,7 @@ export function EditPost({ postId }: PostIdProp) {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild onClick={() => handleSelectPost(postId)}>
+      <DialogTrigger asChild data-testid="editPostButton" onClick={() => handleSelectPost(postId)}>
         <EditIcon />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] md:max-w-[640px]" aria-describedby={undefined}>

@@ -25,7 +25,7 @@ export function DeletePost({ postId }: PostIdProp) {
 
   return (
     <AlertDialog open={isDialogOpen} onOpenChange={(open) => setIsDialogOpen(open)}>
-      <AlertDialogTrigger asChild data-testid="deletePost">
+      <AlertDialogTrigger asChild data-testid="deletePostButton">
         <DeleteIcon />
       </AlertDialogTrigger>
       <AlertDialogContent className="sm:max-w-[600px] md:max-w-[640px]">
