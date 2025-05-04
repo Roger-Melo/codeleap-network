@@ -13,7 +13,7 @@ function PageErrorMessage() {
 type FeedLayoutProps = { children: React.ReactNode }
 
 export default async function FeedLayout({ children }: FeedLayoutProps) {
-  const response = await fetch(baseUrl)
+  const response = await fetch(baseUrl, { cache: "no-store" })
 
   if (!response.ok) {
     return <PageErrorMessage />
