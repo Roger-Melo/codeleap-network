@@ -15,8 +15,6 @@ type FeedLayoutProps = { children: React.ReactNode }
 export default async function FeedLayout({ children }: FeedLayoutProps) {
   const response = await fetch(baseUrl)
 
-  console.log(await response.text()) // see what the server actually returns
-
   if (!response.ok) {
     return <PageErrorMessage />
   }

@@ -40,8 +40,6 @@ export async function addPostAction(newPost: unknown) {
       body: JSON.stringify(validatedNewPost.data)
     })
 
-    console.log(await response.text()) // see what the server actually returns
-
     if (!response.ok) {
       return failMessage
     }
