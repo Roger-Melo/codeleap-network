@@ -60,23 +60,28 @@ async function editPosts(page: Page) {
   for (const post of updatedPosts) {
     const selectedPost = page.getByRole("listitem").filter({ hasText: post.originalTitle }).first()
     await selectedPost.getByTestId("editPostButton").click()
-    await page.getByLabel("Title").fill(post.title)
-    await page.getByLabel("Content").fill(post.content)
-    await page.getByRole("button", { name: "Save changes" }).click()
+
+    const editPostDialog = page.getByRole("dialog", { name: "Edit post" })
+    await expect(editPostDialog).toBeVisible()
+
+    await editPostDialog.getByPlaceholder("Hello world").fill(post.title)
+    await editPostDialog.getByPlaceholder("Content here").fill(post.content)
+
+    await editPostDialog.getByRole("button", { name: "Save changes" }).click()
+    await expect(editPostDialog).not.toBeVisible()
   }
+  await checkEditedPosts(page)
+}
 
-  /*
-  - para cada post
-    - selecionar o post
-    - clicar no post selecionado através do título (para o form de edição abrir)
-    - editar o title do post no form
-    - editar o content do post no form
-    - clicar no botão de enviar
-  - esperar 5s
-  - confirmar posts atualizados
-  */
-
-  // await checkEditedPosts(page)
+async function checkEditedPosts(page: Page) {
+  await awaitFiveSeconds(page)
+  for (const post of updatedPosts) {
+    const postItem = page.getByRole("listitem").filter({ hasText: post.title }).first()
+    await expect(postItem.getByRole("heading", { name: post.title })).toBeVisible()
+    const [firstParagraph, secondParagraph] = post.content.split("\n\n")
+    await expect(postItem).toContainText(firstParagraph)
+    await expect(postItem).toContainText(secondParagraph)
+  }
 }
 
 test.beforeEach("Access /feed", async ({ page }) => {
@@ -97,6 +102,14 @@ test.describe("Post creation", () => {
 test.describe("Post deletion", () => {
   test("Delete posts from posts list", async ({ page }) => {
     await createPosts(page)
+    await deletePosts(page)
+  })
+})
+
+test.describe("Post editing", () => {
+  test("Edit posts on posts list", async ({ page }) => {
+    await createPosts(page)
+    await editPosts(page)
     await deletePosts(page)
   })
 })
