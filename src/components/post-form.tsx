@@ -53,6 +53,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
       await handleEditPost(post, selectedPostId as Post["id"])
     } else if (actionType === "add") {
       const newPost = { ...post, username: usernameState }
+      console.log("newPost:", newPost)
       await handleAddPost(newPost)
     }
 
