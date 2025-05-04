@@ -20,6 +20,7 @@ export default async function FeedLayout({ children }: FeedLayoutProps) {
   }
 
   const data: unknown = await response.json()
+  console.log("data:", data)
   const validatedData = postsDataSchema.safeParse(data)
   console.log("validatedData:", validatedData)
   return validatedData.success
