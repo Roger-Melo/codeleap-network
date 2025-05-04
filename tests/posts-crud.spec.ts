@@ -1,5 +1,7 @@
 import { test, expect, type Page } from "@playwright/test"
 
+test.describe.configure({ mode: "serial" })
+
 const posts = [
   { title: "Post 1", content: "Parágrafo 1 do post 1.\n\nParágrafo 2 do post 1." },
   { title: "Post 2", content: "Parágrafo 1 do post 2.\n\nParágrafo 2 do post 2." },
