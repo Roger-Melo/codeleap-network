@@ -21,6 +21,7 @@ export default async function FeedLayout({ children }: FeedLayoutProps) {
 
   const data: unknown = await response.json()
   const validatedData = postsDataSchema.safeParse(data)
+  console.log("validatedData:", validatedData)
   return validatedData.success
     ? <FeedClientWrapper data={validatedData.data.results}>{children}</FeedClientWrapper>
     : <PageErrorMessage />
