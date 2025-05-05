@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { PostFormFooter } from "./post-form-footer"
 import { usePostsContext, useUsernameContext } from "@/lib/hooks"
 import { type ActionTypes, type Post, type PostFormType, postFormSchema } from "@/lib/types"
+import { createPostServerAction } from "@/actions/create-post-server-action"
 
 type PostFormProps = {
   actionType: ActionTypes
@@ -54,7 +55,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
     } else if (actionType === "add") {
       const newPost = { ...post, username: usernameState }
       console.log("newPost:", newPost)
-      await handleAddPost(newPost)
+      // await handleAddPost(newPost)
     }
 
     setFormDataState(emptyFormDataState)
@@ -69,7 +70,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   return (
     <>
       {actionType === "add" && <PostFormHeading />}
-      <form action={handleFormSubmittion} className="space-y-4">
+      <form action={actionType === "add" ? createPostServerAction : handleFormSubmittion} className="space-y-4">
         <div className="space-y-5">
           <div className="space-y-3">
             <Label className="font-normal" htmlFor="title">Title</Label>
@@ -77,6 +78,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
               id="title"
               value={formDataState.title}
               {...register("title", { onChange: handleTitleChange })}
+              name="title"
               placeholder="Hello world"
               autoFocus
               className="border-primary-darkest-gray"
@@ -89,6 +91,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
               id="content"
               value={formDataState.content}
               {...register("content", { onChange: handleContentChange })}
+              name="content"
               placeholder="Content here"
               className="border-primary-darkest-gray"
             />
