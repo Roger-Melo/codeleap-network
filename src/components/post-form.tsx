@@ -10,8 +10,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { PostFormFooter } from "./post-form-footer"
 import { usePostsContext, useUsernameContext } from "@/lib/hooks"
 import { baseUrl } from "@/lib/utils"
-// import { type ActionTypes, type Post, type PostFormType, postFormSchema } from "@/lib/types"
 import { type ActionTypes, type PostFormType, postFormSchema } from "@/lib/types"
+// import { type ActionTypes, type Post, type PostFormType, postFormSchema } from "@/lib/types"
 // import { createPostServerAction } from "@/actions/create-post-server-action"
 
 type PostFormProps = {
@@ -26,15 +26,15 @@ function PostFormHeading() {
 const emptyFormDataState = { title: "", content: "" }
 
 // export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
+// const { selectedPost, selectedPostId, handleEditPost } = usePostsContext()
+// const { register, trigger, setValue, getValues, formState: { errors } } = useForm<PostFormType>({
+
 export function PostForm({ actionType }: PostFormProps) {
-  // const { selectedPost, selectedPostId, handleEditPost } = usePostsContext()
   const { selectedPost } = usePostsContext()
   const { usernameState } = useUsernameContext()
-  // const { register, trigger, setValue, getValues, formState: { errors } } = useForm<PostFormType>({
   const { register, setValue, formState: { errors } } = useForm<PostFormType>({
     resolver: zodResolver(postFormSchema)
   })
-  // useState is necessary because React completely resets the form fields after an action submission if FE validation (disabled) is removed from PostFormFooter buttons
   const [formDataState, setFormDataState] = useState<PostFormType>(
     actionType === "edit" && selectedPost
       ? { title: selectedPost.title, content: selectedPost.content }
@@ -53,29 +53,32 @@ export function PostForm({ actionType }: PostFormProps) {
       const { title, content, username } = Object.fromEntries(new FormData(e.currentTarget))
       const addedPostToApiSchema = postFormSchema.extend({ username: z.string() })
       const validatedNewPost = addedPostToApiSchema.safeParse({ title, content, username })
-      console.log("validatedNewPost:", validatedNewPost.data)
+
       if (!validatedNewPost.success) {
         alert("Invalid post data.")
         return
       }
+
       const response = await fetch(baseUrl, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(validatedNewPost.data)
       })
+
       if (!response.ok) {
         alert(failMessage)
         return
       }
+
       const data = await response.json()
-      console.log("response recebido da criação do post:", response)
-      console.log("data recebido da criação do post::", data)
       // at the time of this writing, a post object that wasn't created on db don't have these properties
       const postWasNotReallyCreatedOnDb = !data.id || !data.created_datetime
       if (postWasNotReallyCreatedOnDb) {
-        alert("postWasNotReallyCreatedOnDb")
+        alert("Post Was Not Really Created On Db")
         return
       }
+
+      setFormDataState(emptyFormDataState)
     } catch {
       alert(failMessage)
     }
@@ -97,8 +100,6 @@ export function PostForm({ actionType }: PostFormProps) {
     //   console.log("newPost:", newPost)
     //   await handleAddPost(newPost)
     // }
-
-    // setFormDataState(emptyFormDataState)
   }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
