@@ -23,7 +23,7 @@ function PostFormHeading() {
 const emptyFormDataState = { title: "", content: "" }
 
 export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
-  const { selectedPost, selectedPostId, handleAddPost, handleEditPost } = usePostsContext()
+  const { selectedPost, selectedPostId, handleEditPost } = usePostsContext()
   const { usernameState } = useUsernameContext()
   const { register, trigger, setValue, getValues, formState: { errors } } = useForm<PostFormType>({
     resolver: zodResolver(postFormSchema)
