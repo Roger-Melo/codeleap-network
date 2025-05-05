@@ -44,30 +44,29 @@ export function PostForm({ actionType }: PostFormProps) {
     setValue("content", formDataState.content)
   }, [formDataState, setValue])
 
-  async function handleFormSubmittion(formData: FormData) {
-    const { title, content } = Object.fromEntries(formData)
-    const newPost = { title, content, username: usernameState }
-    console.log("newPost:", newPost)
-    createPostServerAction(newPost)
-    // const result = await trigger()
-    // const post = getValues()
-    // setFormDataState(post)
+  // async function handleFormSubmittion(formData: FormData) {
+  // const { title, content, username } = Object.fromEntries(formData)
+  // const newPost = { title, content, username: usernameState }
+  // createPostServerAction(newPost)
+  // const result = await trigger()
+  // const post = getValues()
+  // setFormDataState(post)
 
-    // if (!result) {
-    //   return
-    // }
+  // if (!result) {
+  //   return
+  // }
 
-    // if (actionType === "edit" && onFormSubmission) {
-    // onFormSubmission()
-    // await handleEditPost(post, selectedPostId as Post["id"])
-    // } else if (actionType === "add") {
-    //   const newPost = { ...post, username: usernameState }
-    //   console.log("newPost:", newPost)
-    // await handleAddPost(newPost)
-    // }
+  // if (actionType === "edit" && onFormSubmission) {
+  // onFormSubmission()
+  // await handleEditPost(post, selectedPostId as Post["id"])
+  // } else if (actionType === "add") {
+  //   const newPost = { ...post, username: usernameState }
+  //   console.log("newPost:", newPost)
+  // await handleAddPost(newPost)
+  // }
 
-    // setFormDataState(emptyFormDataState)
-  }
+  // setFormDataState(emptyFormDataState)
+  // }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFormDataState((prev) => ({ ...prev, title: e.target.value }))
@@ -78,7 +77,7 @@ export function PostForm({ actionType }: PostFormProps) {
   return (
     <>
       {actionType === "add" && <PostFormHeading />}
-      <form action={handleFormSubmittion} className="space-y-4">
+      <form action={createPostServerAction} className="space-y-4">
         <div className="space-y-5">
           <div className="space-y-3">
             <Label className="font-normal" htmlFor="title">Title</Label>
@@ -104,6 +103,7 @@ export function PostForm({ actionType }: PostFormProps) {
               className="border-primary-darkest-gray"
             />
             {errors.content && <p className="text-primary-red">{errors.content.message}</p>}
+            <input type="hidden" name="username" value={usernameState} />
           </div>
         </div>
         <PostFormFooter actionType={actionType} formDataState={formDataState} />
