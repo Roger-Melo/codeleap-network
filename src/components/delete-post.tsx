@@ -1,9 +1,11 @@
 "use client"
 
+import { z } from "zod"
 import { type ComponentPropsWithoutRef, forwardRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { AlertDialogAction, AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { type PostIdProp } from "@/lib/types"
+import { baseUrl } from "@/lib/utils"
 import { usePostsContext } from "@/lib/hooks"
 
 const DeleteIcon = forwardRef<SVGSVGElement, ComponentPropsWithoutRef<"svg">>((props, ref) => (
@@ -16,11 +18,32 @@ DeleteIcon.displayName = "DeleteIcon"
 
 export function DeletePost({ postId }: PostIdProp) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const { handleDeletePost } = usePostsContext()
+  const { deletePostFromState } = usePostsContext()
 
   async function handleClickDelete() {
     flushSync(() => setIsDialogOpen(false))
-    await handleDeletePost(postId)
+    const failMessage = "Could not delete post. Please, try again in a few minutes."
+    try {
+      const postIdSchema = z.number()
+      const validatedPostId = postIdSchema.safeParse(postId)
+      if (!validatedPostId.success) {
+        return alert(failMessage)
+      }
+
+      const response = await fetch(`${baseUrl}${validatedPostId.data}/`, {
+        method: "DELETE",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({})
+      })
+
+      if (!response.ok) {
+        return alert(failMessage)
+      }
+
+      deletePostFromState(postId)
+    } catch {
+      alert(failMessage)
+    }
   }
 
   return (
