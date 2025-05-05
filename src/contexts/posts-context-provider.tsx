@@ -2,7 +2,8 @@
 
 import { createContext, useOptimistic, useState, startTransition } from "react"
 import { type Post, type EditedPostToApi, type AddedPostToApi } from "@/lib/types"
-import { addPostAction, editPostAction, deletePostAction } from "@/actions/actions"
+// import { addPostAction, editPostAction, deletePostAction } from "@/actions/actions"
+import { editPostAction, deletePostAction } from "@/actions/actions"
 import { alertIfError } from "@/lib/utils"
 
 type PostsContextType = {
@@ -60,8 +61,8 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
 
   async function handleAddPost(newPost: AddedPostToApi) {
     setOptimisticPosts({ action: "add", payload: newPost })
-    const error = await addPostAction(newPost)
-    alertIfError(error)
+    // const error = await addPostAction(newPost)
+    // alertIfError(error)
   }
 
   async function handleDeletePost(id: Post["id"]) {

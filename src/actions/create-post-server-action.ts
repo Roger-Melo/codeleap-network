@@ -3,12 +3,8 @@
 import { addPostAction } from "./actions"
 import { redirect } from "next/navigation"
 
-export async function createPostServerAction(formData: FormData) {
-  const title = formData.get("title")?.toString() || ""
-  const content = formData.get("content")?.toString() || ""
-  const username = formData.get("username")?.toString() || ""
-
-  const error = await addPostAction({ title, content, username })
+export async function createPostServerAction(newPost: unknown) {
+  const error = await addPostAction(newPost)
   if (error) {
     console.error("Failed to create post:", error)
     return

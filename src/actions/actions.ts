@@ -28,7 +28,6 @@ const addedPostToApiSchema = postFormSchema.extend({ username: z.string() })
 export async function addPostAction(newPost: unknown) {
   const failMessage = { message: "Could not add post. Please, try again in a few minutes." }
   try {
-    await delay(1000)
     const validatedNewPost = addedPostToApiSchema.safeParse(newPost)
     if (!validatedNewPost.success) {
       return { message: "Invalid post data." }
@@ -50,6 +49,7 @@ export async function addPostAction(newPost: unknown) {
     // at the time of this writing, a post object that wasn't created on db don't have these properties
     const postWasNotReallyCreatedOnDb = !data.id || !data.created_datetime
     if (postWasNotReallyCreatedOnDb) {
+      console.log("postWasNotReallyCreatedOnDb:", postWasNotReallyCreatedOnDb)
       return failMessage
     }
   } catch {

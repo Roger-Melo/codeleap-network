@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { PostFormFooter } from "./post-form-footer"
 import { usePostsContext, useUsernameContext } from "@/lib/hooks"
-import { type ActionTypes, type Post, type PostFormType, postFormSchema } from "@/lib/types"
+// import { type ActionTypes, type Post, type PostFormType, postFormSchema } from "@/lib/types"
+import { type ActionTypes, type PostFormType, postFormSchema } from "@/lib/types"
 import { createPostServerAction } from "@/actions/create-post-server-action"
 
 type PostFormProps = {
@@ -22,10 +23,13 @@ function PostFormHeading() {
 
 const emptyFormDataState = { title: "", content: "" }
 
-export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
-  const { selectedPost, selectedPostId, handleEditPost } = usePostsContext()
+// export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
+export function PostForm({ actionType }: PostFormProps) {
+  // const { selectedPost, selectedPostId, handleEditPost } = usePostsContext()
+  const { selectedPost } = usePostsContext()
   const { usernameState } = useUsernameContext()
-  const { register, trigger, setValue, getValues, formState: { errors } } = useForm<PostFormType>({
+  // const { register, trigger, setValue, getValues, formState: { errors } } = useForm<PostFormType>({
+  const { register, setValue, formState: { errors } } = useForm<PostFormType>({
     resolver: zodResolver(postFormSchema)
   })
   // useState is necessary because React completely resets the form fields after an action submission if FE validation (disabled) is removed from PostFormFooter buttons
@@ -40,25 +44,29 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
     setValue("content", formDataState.content)
   }, [formDataState, setValue])
 
-  async function handleFormSubmittion() {
-    const result = await trigger()
-    const post = getValues()
-    setFormDataState(post)
+  async function handleFormSubmittion(formData: FormData) {
+    const { title, content } = Object.fromEntries(formData)
+    const newPost = { title, content, username: usernameState }
+    console.log("newPost:", newPost)
+    createPostServerAction(newPost)
+    // const result = await trigger()
+    // const post = getValues()
+    // setFormDataState(post)
 
-    if (!result) {
-      return
-    }
+    // if (!result) {
+    //   return
+    // }
 
-    if (actionType === "edit" && onFormSubmission) {
-      onFormSubmission()
-      await handleEditPost(post, selectedPostId as Post["id"])
-    } else if (actionType === "add") {
-      const newPost = { ...post, username: usernameState }
-      console.log("newPost:", newPost)
-      // await handleAddPost(newPost)
-    }
+    // if (actionType === "edit" && onFormSubmission) {
+    // onFormSubmission()
+    // await handleEditPost(post, selectedPostId as Post["id"])
+    // } else if (actionType === "add") {
+    //   const newPost = { ...post, username: usernameState }
+    //   console.log("newPost:", newPost)
+    // await handleAddPost(newPost)
+    // }
 
-    setFormDataState(emptyFormDataState)
+    // setFormDataState(emptyFormDataState)
   }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -70,7 +78,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   return (
     <>
       {actionType === "add" && <PostFormHeading />}
-      <form action={actionType === "add" ? createPostServerAction : handleFormSubmittion} className="space-y-4">
+      <form action={handleFormSubmittion} className="space-y-4">
         <div className="space-y-5">
           <div className="space-y-3">
             <Label className="font-normal" htmlFor="title">Title</Label>
