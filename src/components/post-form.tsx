@@ -1,5 +1,6 @@
 "use client"
 
+import { z } from "zod"
 import { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -8,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { PostFormFooter } from "./post-form-footer"
 import { usePostsContext, useUsernameContext } from "@/lib/hooks"
+import { baseUrl } from "@/lib/utils"
 // import { type ActionTypes, type Post, type PostFormType, postFormSchema } from "@/lib/types"
 import { type ActionTypes, type PostFormType, postFormSchema } from "@/lib/types"
 import { createPostServerAction } from "@/actions/create-post-server-action"
@@ -44,29 +46,60 @@ export function PostForm({ actionType }: PostFormProps) {
     setValue("content", formDataState.content)
   }, [formDataState, setValue])
 
-  // async function handleFormSubmittion(formData: FormData) {
-  // const { title, content, username } = Object.fromEntries(formData)
-  // const newPost = { title, content, username: usernameState }
-  // createPostServerAction(newPost)
-  // const result = await trigger()
-  // const post = getValues()
-  // setFormDataState(post)
+  async function handleFormSubmittion(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    const failMessage = "Could not add post. Please, try again in a few minutes."
+    try {
+      const { title, content, username } = Object.fromEntries(new FormData(e.currentTarget))
+      const addedPostToApiSchema = postFormSchema.extend({ username: z.string() })
+      const validatedNewPost = addedPostToApiSchema.safeParse({ title, content, username })
+      console.log("validatedNewPost:", validatedNewPost.data)
+      if (!validatedNewPost.success) {
+        alert("Invalid post data.")
+        return
+      }
+      const response = await fetch(baseUrl, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(validatedNewPost.data)
+      })
+      if (!response.ok) {
+        alert(failMessage)
+        return
+      }
+      const data = await response.json()
+      console.log("response recebido da criação do post:", response)
+      console.log("data recebido da criação do post::", data)
+      // at the time of this writing, a post object that wasn't created on db don't have these properties
+      const postWasNotReallyCreatedOnDb = !data.id || !data.created_datetime
+      if (postWasNotReallyCreatedOnDb) {
+        alert("postWasNotReallyCreatedOnDb")
+        return
+      }
+    } catch {
+      alert(failMessage)
+    }
 
-  // if (!result) {
-  //   return
-  // }
+    // createPostServerAction(newPost)
+    // const result = await trigger()
+    // const post = getValues()
+    // setFormDataState(post)
 
-  // if (actionType === "edit" && onFormSubmission) {
-  // onFormSubmission()
-  // await handleEditPost(post, selectedPostId as Post["id"])
-  // } else if (actionType === "add") {
-  //   const newPost = { ...post, username: usernameState }
-  //   console.log("newPost:", newPost)
-  // await handleAddPost(newPost)
-  // }
+    // if (!result) {
+    //   return
+    // }
 
-  // setFormDataState(emptyFormDataState)
-  // }
+    // if (actionType === "edit" && onFormSubmission) {
+    //   onFormSubmission()
+    //   await handleEditPost(post, selectedPostId as Post["id"])
+    // } else if (actionType === "add") {
+    //   const newPost = { ...post, username: usernameState }
+    //   console.log("newPost:", newPost)
+    //   await handleAddPost(newPost)
+    // }
+
+    // setFormDataState(emptyFormDataState)
+  }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFormDataState((prev) => ({ ...prev, title: e.target.value }))
@@ -77,7 +110,8 @@ export function PostForm({ actionType }: PostFormProps) {
   return (
     <>
       {actionType === "add" && <PostFormHeading />}
-      <form action={createPostServerAction} className="space-y-4">
+      {/* <form action={createPostServerAction} className="space-y-4"> */}
+      <form onSubmit={handleFormSubmittion} className="space-y-4">
         <div className="space-y-5">
           <div className="space-y-3">
             <Label className="font-normal" htmlFor="title">Title</Label>
