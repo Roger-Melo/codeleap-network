@@ -1,9 +1,40 @@
-"use server"
-
 import { z } from "zod"
-import { revalidatePath } from "next/cache"
-import { postFormSchema } from "@/lib/types"
-import { baseUrl, delay } from "@/lib/utils"
+import { baseUrl } from "@/lib/utils"
+import { postFormSchema, postSchema } from "@/lib/types"
+import { type Post } from "@/lib/types"
+
+export async function addPostToDb(e: React.FormEvent<HTMLFormElement>, addPostToState: (newPost: Post) => void) {
+  const failMessage = "Could not add post. Please, try again in a few minutes."
+  try {
+    const { title, content, username } = Object.fromEntries(new FormData(e.currentTarget))
+    const addedPostToApiSchema = postFormSchema.extend({ username: z.string() })
+    const validatedNewPost = addedPostToApiSchema.safeParse({ title, content, username })
+
+    if (!validatedNewPost.success) {
+      return alert("Invalid post data.")
+    }
+
+    const response = await fetch(baseUrl, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(validatedNewPost.data)
+    })
+
+    if (!response.ok) {
+      return alert(failMessage)
+    }
+
+    const createdPostOnDb: unknown = await response.json()
+    const validatedCreatedPostOnDb = postSchema.safeParse(createdPostOnDb)
+    if (!validatedCreatedPostOnDb.success) {
+      return alert("Post was not created on db")
+    }
+
+    addPostToState(validatedCreatedPostOnDb.data)
+  } catch {
+    alert(failMessage)
+  }
+}
 
 const usernameSchema = z.string()
 
@@ -22,6 +53,16 @@ export async function setUsernameAction(username: unknown) {
     }
   }
 }
+
+// rename this file
+// move this file
+/*
+"use server"
+
+import { z } from "zod"
+import { revalidatePath } from "next/cache"
+import { postFormSchema } from "@/lib/types"
+import { baseUrl, delay } from "@/lib/utils"
 
 const addedPostToApiSchema = postFormSchema.extend({ username: z.string() })
 
@@ -111,3 +152,4 @@ export async function deletePostAction(postId: unknown) {
 
   revalidatePath("/feed", "layout")
 }
+*/

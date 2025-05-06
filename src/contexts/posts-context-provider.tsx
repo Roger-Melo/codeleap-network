@@ -2,7 +2,6 @@
 
 import { createContext, useState } from "react"
 import { type Post } from "@/lib/types"
-// import { editPostAction } from "@/actions/actions"
 
 type PostsContextType = {
   posts: Post[]

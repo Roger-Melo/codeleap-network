@@ -1,6 +1,5 @@
 "use client"
 
-import { z } from "zod"
 import { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -9,8 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { PostFormFooter } from "./post-form-footer"
 import { usePostsContext, useUsernameContext } from "@/lib/hooks"
-import { baseUrl } from "@/lib/utils"
-import { type ActionTypes, type PostFormType, postFormSchema, postSchema } from "@/lib/types"
+import { type ActionTypes, type PostFormType, postFormSchema } from "@/lib/types"
+import { addPostToDb } from "@/actions/actions"
 // import { type ActionTypes, type Post, type PostFormType, postFormSchema } from "@/lib/types"
 // import { createPostServerAction } from "@/actions/create-post-server-action"
 
@@ -30,7 +29,7 @@ const emptyFormDataState = { title: "", content: "" }
 // const { register, trigger, setValue, getValues, formState: { errors } } = useForm<PostFormType>({
 
 export function PostForm({ actionType }: PostFormProps) {
-  const { selectedPost, addPostToState } = usePostsContext()
+  const { addPostToState, selectedPost } = usePostsContext()
   const { usernameState } = useUsernameContext()
   const { register, setValue, formState: { errors } } = useForm<PostFormType>({
     resolver: zodResolver(postFormSchema)
@@ -48,36 +47,10 @@ export function PostForm({ actionType }: PostFormProps) {
 
   async function handleFormSubmittion(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    const failMessage = "Could not add post. Please, try again in a few minutes."
-    try {
-      const { title, content, username } = Object.fromEntries(new FormData(e.currentTarget))
-      const addedPostToApiSchema = postFormSchema.extend({ username: z.string() })
-      const validatedNewPost = addedPostToApiSchema.safeParse({ title, content, username })
-
-      if (!validatedNewPost.success) {
-        return alert("Invalid post data.")
-      }
-
-      const response = await fetch(baseUrl, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(validatedNewPost.data)
-      })
-
-      if (!response.ok) {
-        return alert(failMessage)
-      }
-
-      const createdPostOnDb: unknown = await response.json()
-      const validatedCreatedPostOnDb = postSchema.safeParse(createdPostOnDb)
-      if (!validatedCreatedPostOnDb.success) {
-        return alert("Post was not created on db")
-      }
-
-      addPostToState(validatedCreatedPostOnDb.data)
+    if (actionType === "add") {
+      await addPostToDb(e, addPostToState)
       setFormDataState(emptyFormDataState)
-    } catch {
-      alert(failMessage)
+      return
     }
 
     // createPostServerAction(newPost)
@@ -108,7 +81,6 @@ export function PostForm({ actionType }: PostFormProps) {
   return (
     <>
       {actionType === "add" && <PostFormHeading />}
-      {/* <form action={createPostServerAction} className="space-y-4"> */}
       <form onSubmit={handleFormSubmittion} className="space-y-4">
         <div className="space-y-5">
           <div className="space-y-3">
