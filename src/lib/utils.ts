@@ -36,9 +36,3 @@ export function getPostTimeCreation(timestamp: string) {
   const d = Math.floor(days)
   return `${d} day${d !== 1 ? "s" : ""} ago`
 }
-
-export function alertIfError(error: { message: string } | undefined) {
-  if (error) {
-    alert(error.message)
-  }
-}
