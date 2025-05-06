@@ -9,8 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { PostFormFooter } from "./post-form-footer"
 import { usePostsContext, useUsernameContext } from "@/lib/hooks"
 import { type ActionTypes, type PostFormType, type Post, postFormSchema } from "@/lib/types"
-import { editPostOnDb } from "@/actions/actions"
-import { addPostToDb } from "@/lib/db-handlers"
+import { addPostToDb, editPostOnDb } from "@/lib/db-handlers"
 
 type PostFormProps = {
   actionType: ActionTypes
