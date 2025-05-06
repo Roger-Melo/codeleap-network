@@ -23,28 +23,6 @@ export const PostsContext = createContext<PostsContextType | null>(null)
 
 export function PostsContextProvider({ data, children }: PostsContextProviderProps) {
   const [posts, setPosts] = useState(data)
-  // const [optimisticPosts, setOptimisticPosts] = useOptimistic(data, (state, { action, payload }) => {
-  //   if (action === "add") {
-  //     const tempPostToOptimisticUi = {
-  //       ...payload,
-  //       id: Math.random(),
-  //       // temporary. only to user sees when it's created with optimistic UI
-  //       created_datetime: new Date().toISOString()
-  //     }
-  //     return [tempPostToOptimisticUi, ...state]
-  //   }
-
-  //   if (action === "edit") {
-  //     return state.map((post) =>
-  //       post.id === payload.selectedPostId ? { ...post, ...payload.editedData } : post)
-  //   }
-
-  //   if (action === "delete") {
-  //     return state.filter((post) => post.id !== payload.id)
-  //   }
-
-  //   return state
-  // })
   const [selectedPostId, setSelectedPostId] = useState<Post["id"] | null>(null)
 
   const selectedPost = posts.find((post) => post.id === selectedPostId)

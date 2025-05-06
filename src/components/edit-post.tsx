@@ -38,7 +38,7 @@ export function EditPost({ postId }: PostIdProp) {
         </DialogHeader>
         <PostForm
           actionType="edit"
-          onFormSubmission={() => flushSync(() => setIsDialogOpen(false))}
+          closeDialog={() => flushSync(() => setIsDialogOpen(false))}
         />
       </DialogContent>
     </Dialog>

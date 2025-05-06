@@ -8,14 +8,12 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { PostFormFooter } from "./post-form-footer"
 import { usePostsContext, useUsernameContext } from "@/lib/hooks"
-import { type ActionTypes, type PostFormType, postFormSchema } from "@/lib/types"
-import { addPostToDb } from "@/actions/actions"
-// import { type ActionTypes, type Post, type PostFormType, postFormSchema } from "@/lib/types"
-// import { createPostServerAction } from "@/actions/create-post-server-action"
+import { type ActionTypes, type PostFormType, type Post, postFormSchema } from "@/lib/types"
+import { addPostToDb, editPostOnDb } from "@/actions/actions"
 
 type PostFormProps = {
   actionType: ActionTypes
-  onFormSubmission?: () => void
+  closeDialog?: () => void
 }
 
 function PostFormHeading() {
@@ -24,12 +22,8 @@ function PostFormHeading() {
 
 const emptyFormDataState = { title: "", content: "" }
 
-// export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
-// const { selectedPost, selectedPostId, editPostOnState } = usePostsContext()
-// const { register, trigger, setValue, getValues, formState: { errors } } = useForm<PostFormType>({
-
-export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
-  const { addPostToState, selectedPost } = usePostsContext()
+export function PostForm({ actionType, closeDialog }: PostFormProps) {
+  const { editPostOnState, addPostToState, selectedPost, selectedPostId } = usePostsContext()
   const { usernameState } = useUsernameContext()
   const { register, setValue, formState: { errors } } = useForm<PostFormType>({
     resolver: zodResolver(postFormSchema)
@@ -53,6 +47,7 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
       content: formData.get("content") as string,
       username: formData.get("username") as string,
     }
+
     if (actionType === "add") {
       const { createdPostOnDb, message } = await addPostToDb(post)
       if (!createdPostOnDb) {
@@ -60,10 +55,14 @@ export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
       }
       addPostToState(createdPostOnDb)
       setFormDataState(emptyFormDataState)
-    } else if (actionType === "edit" && onFormSubmission) {
-      // await editPostOnDb()
-      // editPostOnState(post, selectedPostId as Post["id"])
-      // onFormSubmission()
+    } else if (actionType === "edit" && closeDialog) {
+      const editedData = { title: post.title, content: post.content }
+      const { editedPostOnDb, message } = await editPostOnDb(editedData, selectedPostId)
+      if (!editedPostOnDb) {
+        return alert(message)
+      }
+      editPostOnState(editedData, selectedPostId as Post["id"])
+      closeDialog()
     }
   }
 
