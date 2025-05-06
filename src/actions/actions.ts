@@ -7,11 +7,9 @@ const usernameSchema = z.string()
 export async function setUsernameAction(username: unknown) {
   try {
     const validatedUsername = usernameSchema.safeParse(username)
-    if (!validatedUsername.success) {
-      return { error: true, errorMessage: "Invalid username." }
-    }
-
-    return { username: validatedUsername.data }
+    return !validatedUsername.success
+      ? { error: true, errorMessage: "Invalid username." }
+      : { username: validatedUsername.data }
   } catch {
     return {
       error: true,
