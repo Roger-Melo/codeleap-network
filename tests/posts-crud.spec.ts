@@ -8,49 +8,50 @@ const posts = [
   { title: "Post 3", content: "Parágrafo 1 do post 3.\n\nParágrafo 2 do post 3." },
 ] as const
 
-// async function awaitFiveSeconds(page: Page) {
-// necessary to skip the optimistic UI test & test the real outcome confirmed by the server
-// await page.waitForTimeout(5_000)
-// }
+async function deletePosts(page: Page) {
+  for (const post of posts) {
+    const selectedPost = page.getByRole("listitem").filter({ hasText: post.title }).first()
+    await selectedPost.getByTestId("deletePostButton").click()
+    await page.getByRole("button", { name: "Delete" }).click()
+  }
 
-// async function deletePosts(page: Page) {
-//   for (const post of posts) {
-//     const selectedPost = page.getByRole("listitem").filter({ hasText: post.title }).first()
-//     await selectedPost.getByTestId("deletePostButton").click()
-//     await page.getByRole("button", { name: "Delete" }).click()
-//   }
-//   await checkDeletedPosts(page)
-// }
+  await checkDeletedPosts(page)
+}
 
-// async function checkDeletedPosts(page: Page) {
-//   await awaitFiveSeconds(page)
-//   for (const post of posts) {
-//     await expect(page.locator("main")).not.toHaveText(post.title)
-//   }
-// }
+async function checkDeletedPosts(page: Page) {
+  for (const post of posts) {
+    await expect(page.locator("main")).not.toHaveText(post.title)
+  }
+}
 
-// async function createPosts(page: Page) {
-//   const inputTitle = page.getByLabel("Title")
-//   const textAreaContent = page.getByLabel("Content")
-//   const buttonCreatePost = page.getByRole("button", { name: "Create" })
-//   for (const post of posts) {
-//     await inputTitle.fill(post.title)
-//     await textAreaContent.fill(post.content)
-//     await buttonCreatePost.click()
-//   }
-//   await checkCreatedPosts(page)
-// }
+async function createPosts(page: Page) {
+  // select form elements
+  const inputTitle = page.getByLabel("Title")
+  const textAreaContent = page.getByLabel("Content")
+  const buttonCreatePost = page.getByRole("button", { name: "Create" })
 
-// async function checkCreatedPosts(page: Page) {
-//   await awaitFiveSeconds(page)
-//   for (const post of posts) {
-//     const postItem = page.getByRole("listitem").filter({ hasText: post.title }).first()
-//     await expect(postItem.getByRole("heading", { name: post.title })).toBeVisible()
-//     const [firstParagraph, secondParagraph] = post.content.split("\n\n")
-//     await expect(postItem).toContainText(firstParagraph)
-//     await expect(postItem).toContainText(secondParagraph)
-//   }
-// }
+  // create posts
+  for (const post of posts) {
+    await inputTitle.fill(post.title)
+    await textAreaContent.fill(post.content)
+    await expect(buttonCreatePost).not.toBeDisabled()
+    await buttonCreatePost.click()
+    await expect(inputTitle).toHaveValue("")
+    await expect(textAreaContent).toHaveValue("")
+  }
+
+  await checkCreatedPosts(page)
+}
+
+async function checkCreatedPosts(page: Page) {
+  for (const post of posts) {
+    const postItem = page.getByRole("listitem").filter({ hasText: post.title }).first()
+    await expect(postItem.getByRole("heading", { name: post.title })).toBeVisible()
+    const [firstParagraph, secondParagraph] = post.content.split("\n\n")
+    await expect(postItem).toContainText(firstParagraph)
+    await expect(postItem).toContainText(secondParagraph)
+  }
+}
 
 const updatedPosts = [
   { originalTitle: "Post 1", title: "Post 1 (editado)", content: "Parágrafo 1 do post 1 (editado).\n\nParágrafo 2 do post 1 (editado)." },
@@ -58,33 +59,33 @@ const updatedPosts = [
   { originalTitle: "Post 3", title: "Post 3 (editado)", content: "Parágrafo 1 do post 3 (editado).\n\nParágrafo 2 do post 3 (editado)." },
 ] as const
 
-// async function editPosts(page: Page) {
-//   for (const post of updatedPosts) {
-//     const selectedPost = page.getByRole("listitem").filter({ hasText: post.originalTitle }).first()
-//     await selectedPost.getByTestId("editPostButton").click()
+async function editPosts(page: Page) {
+  for (const post of updatedPosts) {
+    const selectedPost = page.getByRole("listitem").filter({ hasText: post.originalTitle }).first()
+    await selectedPost.getByTestId("editPostButton").click()
 
-//     const editPostDialog = page.getByRole("dialog", { name: "Edit post" })
-//     await expect(editPostDialog).toBeVisible()
+    const editPostDialog = page.getByRole("dialog", { name: "Edit post" })
+    await expect(editPostDialog).toBeVisible()
 
-//     await editPostDialog.getByPlaceholder("Hello world").fill(post.title)
-//     await editPostDialog.getByPlaceholder("Content here").fill(post.content)
+    await editPostDialog.getByPlaceholder("Hello world").fill(post.title)
+    await editPostDialog.getByPlaceholder("Content here").fill(post.content)
 
-//     await editPostDialog.getByRole("button", { name: "Save changes" }).click()
-//     await expect(editPostDialog).not.toBeVisible()
-//   }
-//   await checkEditedPosts(page)
-// }
+    await editPostDialog.getByRole("button", { name: "Save changes" }).click()
+    await expect(editPostDialog).not.toBeVisible()
+  }
 
-// async function checkEditedPosts(page: Page) {
-//   await awaitFiveSeconds(page)
-//   for (const post of updatedPosts) {
-//     const postItem = page.getByRole("listitem").filter({ hasText: post.title }).first()
-//     await expect(postItem.getByRole("heading", { name: post.title })).toBeVisible()
-//     const [firstParagraph, secondParagraph] = post.content.split("\n\n")
-//     await expect(postItem).toContainText(firstParagraph)
-//     await expect(postItem).toContainText(secondParagraph)
-//   }
-// }
+  await checkEditedPosts(page)
+}
+
+async function checkEditedPosts(page: Page) {
+  for (const post of updatedPosts) {
+    const postItem = page.getByRole("listitem").filter({ hasText: post.title }).first()
+    await expect(postItem.getByRole("heading", { name: post.title })).toBeVisible()
+    const [firstParagraph, secondParagraph] = post.content.split("\n\n")
+    await expect(postItem).toContainText(firstParagraph)
+    await expect(postItem).toContainText(secondParagraph)
+  }
+}
 
 test.beforeEach("Access /feed", async ({ page }) => {
   await page.goto("/")
@@ -96,144 +97,22 @@ test.beforeEach("Access /feed", async ({ page }) => {
 
 test.describe("Post creation", () => {
   test("Create posts on posts list", async ({ page }) => {
-    // select form elements
-    const inputTitle = page.getByLabel("Title")
-    const textAreaContent = page.getByLabel("Content")
-    const buttonCreatePost = page.getByRole("button", { name: "Create" })
-
-    // create posts
-    for (const post of posts) {
-      await inputTitle.fill(post.title)
-      await textAreaContent.fill(post.content)
-      await expect(buttonCreatePost).not.toBeDisabled()
-      await buttonCreatePost.click()
-      await expect(inputTitle).toHaveValue("")
-      await expect(textAreaContent).toHaveValue("")
-    }
-
-    // check posts creation
-    for (const post of posts) {
-      const postItem = page.getByRole("listitem").filter({ hasText: post.title }).first()
-      await expect(postItem.getByRole("heading", { name: post.title })).toBeVisible()
-      const [firstParagraph, secondParagraph] = post.content.split("\n\n")
-      await expect(postItem).toContainText(firstParagraph)
-      await expect(postItem).toContainText(secondParagraph)
-    }
-
-    // delete posts
-    for (const post of posts) {
-      const selectedPost = page.getByRole("listitem").filter({ hasText: post.title }).first()
-      await selectedPost.getByTestId("deletePostButton").click()
-      await page.getByRole("button", { name: "Delete" }).click()
-    }
-
-    // check posts deletion
-    for (const post of posts) {
-      await expect(page.locator("main")).not.toHaveText(post.title)
-    }
+    await createPosts(page)
+    await deletePosts(page)
   })
 })
 
 test.describe("Post deletion", () => {
   test("Delete posts from posts list", async ({ page }) => {
-    // select form elements
-    const inputTitle = page.getByLabel("Title")
-    const textAreaContent = page.getByLabel("Content")
-    const buttonCreatePost = page.getByRole("button", { name: "Create" })
-
-    // create posts
-    for (const post of posts) {
-      await inputTitle.fill(post.title)
-      await textAreaContent.fill(post.content)
-      await expect(buttonCreatePost).not.toBeDisabled()
-      await buttonCreatePost.click()
-      await expect(inputTitle).toHaveValue("")
-      await expect(textAreaContent).toHaveValue("")
-    }
-
-    // check posts creation
-    for (const post of posts) {
-      const postItem = page.getByRole("listitem").filter({ hasText: post.title }).first()
-      await expect(postItem.getByRole("heading", { name: post.title })).toBeVisible()
-      const [firstParagraph, secondParagraph] = post.content.split("\n\n")
-      await expect(postItem).toContainText(firstParagraph)
-      await expect(postItem).toContainText(secondParagraph)
-    }
-
-    // delete posts
-    for (const post of posts) {
-      const selectedPost = page.getByRole("listitem").filter({ hasText: post.title }).first()
-      await selectedPost.getByTestId("deletePostButton").click()
-      await page.getByRole("button", { name: "Delete" }).click()
-    }
-
-    // check posts deletion
-    for (const post of posts) {
-      await expect(page.locator("main")).not.toHaveText(post.title)
-    }
+    await createPosts(page)
+    await deletePosts(page)
   })
 })
 
 test.describe("Post editing", () => {
   test("Edit posts on posts list", async ({ page }) => {
-    // select form elements
-    const inputTitle = page.getByLabel("Title")
-    const textAreaContent = page.getByLabel("Content")
-    const buttonCreatePost = page.getByRole("button", { name: "Create" })
-
-    // create posts
-    for (const post of posts) {
-      await inputTitle.fill(post.title)
-      await textAreaContent.fill(post.content)
-      await expect(buttonCreatePost).not.toBeDisabled()
-      await buttonCreatePost.click()
-      await expect(inputTitle).toHaveValue("")
-      await expect(textAreaContent).toHaveValue("")
-    }
-
-    // check posts creation
-    for (const post of posts) {
-      const postItem = page.getByRole("listitem").filter({ hasText: post.title }).first()
-      await expect(postItem.getByRole("heading", { name: post.title })).toBeVisible()
-      const [firstParagraph, secondParagraph] = post.content.split("\n\n")
-      await expect(postItem).toContainText(firstParagraph)
-      await expect(postItem).toContainText(secondParagraph)
-    }
-
-    // edit posts
-    for (const post of updatedPosts) {
-      const selectedPost = page.getByRole("listitem").filter({ hasText: post.originalTitle }).first()
-      await selectedPost.getByTestId("editPostButton").click()
-
-      const editPostDialog = page.getByRole("dialog", { name: "Edit post" })
-      await expect(editPostDialog).toBeVisible()
-
-      await editPostDialog.getByPlaceholder("Hello world").fill(post.title)
-      await editPostDialog.getByPlaceholder("Content here").fill(post.content)
-
-      await editPostDialog.getByRole("button", { name: "Save changes" }).click()
-      await expect(editPostDialog).not.toBeVisible()
-    }
-
-    // check edited posts
-    for (const post of updatedPosts) {
-      const postItem = page.getByRole("listitem").filter({ hasText: post.title }).first()
-      await expect(postItem.getByRole("heading", { name: post.title })).toBeVisible()
-      const [firstParagraph, secondParagraph] = post.content.split("\n\n")
-      await expect(postItem).toContainText(firstParagraph)
-      await expect(postItem).toContainText(secondParagraph)
-    }
-
-    // delete posts
-    for (const post of posts) {
-      const selectedPost = page.getByRole("listitem").filter({ hasText: post.title }).first()
-      await selectedPost.getByTestId("deletePostButton").click()
-      await page.getByRole("button", { name: "Delete" }).click()
-    }
-
-    // check posts deletion
-    for (const post of posts) {
-      await expect(page.locator("main")).not.toHaveText(post.title)
-    }
+    await createPosts(page)
+    await editPosts(page)
+    await deletePosts(page)
   })
 })
