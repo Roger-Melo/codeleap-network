@@ -1,8 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useState } from "react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -25,19 +23,11 @@ const emptyFormDataState = { title: "", content: "" }
 export function PostForm({ actionType, closeDialog }: PostFormProps) {
   const { editPostOnState, addPostToState, selectedPost, selectedPostId } = usePostsContext()
   const { usernameState } = useUsernameContext()
-  const { register, setValue, formState: { errors } } = useForm<PostFormType>({
-    resolver: zodResolver(postFormSchema)
-  })
   const [formDataState, setFormDataState] = useState<PostFormType>(
     actionType === "edit" && selectedPost
       ? { title: selectedPost.title, content: selectedPost.content }
       : emptyFormDataState
   )
-
-  useEffect(() => {
-    setValue("title", formDataState.title)
-    setValue("content", formDataState.content)
-  }, [formDataState, setValue])
 
   async function handleFormSubmittion(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -82,25 +72,23 @@ export function PostForm({ actionType, closeDialog }: PostFormProps) {
             <Input
               id="title"
               value={formDataState.title}
-              {...register("title", { onChange: handleTitleChange })}
+              onChange={handleTitleChange}
               name="title"
               placeholder="Hello world"
               autoFocus
               className="border-primary-darkest-gray"
             />
-            {errors.title && <p className="text-primary-red">{errors.title.message}</p>}
           </div>
           <div className="space-y-3">
             <Label className="font-normal" htmlFor="content">Content</Label>
             <Textarea
               id="content"
               value={formDataState.content}
-              {...register("content", { onChange: handleContentChange })}
+              onChange={handleContentChange}
               name="content"
               placeholder="Content here"
               className="border-primary-darkest-gray"
             />
-            {errors.content && <p className="text-primary-red">{errors.content.message}</p>}
             <input type="hidden" name="username" value={usernameState} />
           </div>
         </div>

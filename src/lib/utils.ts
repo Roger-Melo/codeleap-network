@@ -7,10 +7,6 @@ export function cn(...inputs: ClassValue[]) {
 
 export const baseUrl = "https://dev.codeleap.co.uk/careers/"
 
-export async function delay(milliseconds: number) {
-  await new Promise((resolve) => setTimeout(resolve, milliseconds))
-}
-
 export function getPostTimeCreation(timestamp: string) {
   const nowMiliseconds = Date.now()
   const createdMiliseconds = new Date(timestamp).getTime()
