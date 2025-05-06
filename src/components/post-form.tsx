@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { PostFormFooter } from "./post-form-footer"
 import { usePostsContext, useUsernameContext } from "@/lib/hooks"
 import { baseUrl } from "@/lib/utils"
-import { type ActionTypes, type PostFormType, postFormSchema } from "@/lib/types"
+import { type ActionTypes, type PostFormType, postFormSchema, postSchema } from "@/lib/types"
 // import { type ActionTypes, type Post, type PostFormType, postFormSchema } from "@/lib/types"
 // import { createPostServerAction } from "@/actions/create-post-server-action"
 
@@ -30,7 +30,7 @@ const emptyFormDataState = { title: "", content: "" }
 // const { register, trigger, setValue, getValues, formState: { errors } } = useForm<PostFormType>({
 
 export function PostForm({ actionType }: PostFormProps) {
-  const { selectedPost } = usePostsContext()
+  const { selectedPost, addPostToState } = usePostsContext()
   const { usernameState } = useUsernameContext()
   const { register, setValue, formState: { errors } } = useForm<PostFormType>({
     resolver: zodResolver(postFormSchema)
@@ -55,8 +55,7 @@ export function PostForm({ actionType }: PostFormProps) {
       const validatedNewPost = addedPostToApiSchema.safeParse({ title, content, username })
 
       if (!validatedNewPost.success) {
-        alert("Invalid post data.")
-        return
+        return alert("Invalid post data.")
       }
 
       const response = await fetch(baseUrl, {
@@ -66,18 +65,16 @@ export function PostForm({ actionType }: PostFormProps) {
       })
 
       if (!response.ok) {
-        alert(failMessage)
-        return
+        return alert(failMessage)
       }
 
-      const data = await response.json()
-      // at the time of this writing, a post object that wasn't created on db don't have these properties
-      const postWasNotReallyCreatedOnDb = !data.id || !data.created_datetime
-      if (postWasNotReallyCreatedOnDb) {
-        alert("Post Was Not Really Created On Db")
-        return
+      const createdPostOnDb: unknown = await response.json()
+      const validatedCreatedPostOnDb = postSchema.safeParse(createdPostOnDb)
+      if (!validatedCreatedPostOnDb.success) {
+        return alert("Post was not created on db")
       }
 
+      addPostToState(validatedCreatedPostOnDb.data)
       setFormDataState(emptyFormDataState)
     } catch {
       alert(failMessage)

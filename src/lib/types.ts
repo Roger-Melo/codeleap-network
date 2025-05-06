@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-const postSchema = z.object({
+export const postSchema = z.object({
   id: z.number(),
   username: z.string(),
   created_datetime: z.string().datetime(),

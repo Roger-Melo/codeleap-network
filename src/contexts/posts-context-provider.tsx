@@ -1,10 +1,8 @@
 "use client"
 
 import { createContext, useState } from "react"
-// import { type Post, type EditedPostToApi, type AddedPostToApi } from "@/lib/types"
 import { type Post } from "@/lib/types"
 // import { editPostAction } from "@/actions/actions"
-// import { alertIfError } from "@/lib/utils"
 
 type PostsContextType = {
   posts: Post[]
@@ -14,7 +12,7 @@ type PostsContextType = {
   handleUnselectPost: () => void
   deletePostFromState: (id: Post["id"]) => void
   // handleEditPost: (editedData: EditedPostToApi, selectedPostId: Post["id"]) => Promise<void>
-  // handleAddPost: (newPost: AddedPostToApi) => Promise<void>
+  addPostToState: (newPost: Post) => void
 }
 
 type PostsContextProviderProps = {
@@ -60,19 +58,12 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
     setSelectedPostId(null)
   }
 
-  // async function handleAddPost(newPost: AddedPostToApi) {
-  // setOptimisticPosts({ action: "add", payload: newPost })
-  // const error = await addPostAction(newPost)
-  // alertIfError(error)
-  // }
+  async function addPostToState(newPost: Post) {
+    setPosts((prev) => [newPost, ...prev])
+  }
 
   async function deletePostFromState(id: Post["id"]) {
     setPosts((prev) => prev.filter((post) => post.id !== id))
-    // startTransition because there's no form action to delete a post
-    // startTransition(() => setOptimisticPosts({ action: "delete", payload: { id } }))
-    // const error = await deletePostAction(id)
-    // alertIfError(error)
-    // setSelectedPostId(null)
   }
 
   // async function handleEditPost(editedData: EditedPostToApi, selectedPostId: Post["id"]) {
@@ -90,7 +81,7 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
       handleUnselectPost,
       deletePostFromState,
       // handleEditPost,
-      // handleAddPost
+      addPostToState
     }}>
       {children}
     </PostsContext.Provider>
