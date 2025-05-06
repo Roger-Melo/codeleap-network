@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useState } from "react"
-import { type Post } from "@/lib/types"
+import { type Post, type EditedPostToApi } from "@/lib/types"
 
 type PostsContextType = {
   posts: Post[]
@@ -10,7 +10,7 @@ type PostsContextType = {
   handleSelectPost: (id: Post["id"]) => void
   handleUnselectPost: () => void
   deletePostFromState: (id: Post["id"]) => void
-  // handleEditPost: (editedData: EditedPostToApi, selectedPostId: Post["id"]) => Promise<void>
+  editPostOnState: (editedData: EditedPostToApi, selectedPostId: Post["id"]) => void
   addPostToState: (newPost: Post) => void
 }
 
@@ -65,11 +65,13 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
     setPosts((prev) => prev.filter((post) => post.id !== id))
   }
 
-  // async function handleEditPost(editedData: EditedPostToApi, selectedPostId: Post["id"]) {
-  // setOptimisticPosts({ action: "edit", payload: { editedData, selectedPostId } })
-  // const error = await editPostAction(editedData, selectedPostId)
-  // alertIfError(error)
-  // }
+  async function editPostOnState(editedData: EditedPostToApi, selectedPostId: Post["id"]) {
+    setPosts((prev) => prev.map((post) =>
+      post.id === selectedPostId
+        ? { ...post, title: editedData.title, content: editedData.content }
+        : post
+    ))
+  }
 
   return (
     <PostsContext.Provider value={{
@@ -79,7 +81,7 @@ export function PostsContextProvider({ data, children }: PostsContextProviderPro
       handleSelectPost,
       handleUnselectPost,
       deletePostFromState,
-      // handleEditPost,
+      editPostOnState,
       addPostToState
     }}>
       {children}

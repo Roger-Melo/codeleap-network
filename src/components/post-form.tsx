@@ -25,10 +25,10 @@ function PostFormHeading() {
 const emptyFormDataState = { title: "", content: "" }
 
 // export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
-// const { selectedPost, selectedPostId, handleEditPost } = usePostsContext()
+// const { selectedPost, selectedPostId, editPostOnState } = usePostsContext()
 // const { register, trigger, setValue, getValues, formState: { errors } } = useForm<PostFormType>({
 
-export function PostForm({ actionType }: PostFormProps) {
+export function PostForm({ actionType, onFormSubmission }: PostFormProps) {
   const { addPostToState, selectedPost } = usePostsContext()
   const { usernameState } = useUsernameContext()
   const { register, setValue, formState: { errors } } = useForm<PostFormType>({
@@ -47,29 +47,24 @@ export function PostForm({ actionType }: PostFormProps) {
 
   async function handleFormSubmittion(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (actionType === "add") {
-      await addPostToDb(e, addPostToState)
-      setFormDataState(emptyFormDataState)
-      return
+    const formData = new FormData(e.currentTarget)
+    const post = {
+      title: formData.get("title") as string,
+      content: formData.get("content") as string,
+      username: formData.get("username") as string,
     }
-
-    // createPostServerAction(newPost)
-    // const result = await trigger()
-    // const post = getValues()
-    // setFormDataState(post)
-
-    // if (!result) {
-    //   return
-    // }
-
-    // if (actionType === "edit" && onFormSubmission) {
-    //   onFormSubmission()
-    //   await handleEditPost(post, selectedPostId as Post["id"])
-    // } else if (actionType === "add") {
-    //   const newPost = { ...post, username: usernameState }
-    //   console.log("newPost:", newPost)
-    //   await handleAddPost(newPost)
-    // }
+    if (actionType === "add") {
+      const { createdPostOnDb, message } = await addPostToDb(post)
+      if (!createdPostOnDb) {
+        return alert(message)
+      }
+      addPostToState(createdPostOnDb)
+      setFormDataState(emptyFormDataState)
+    } else if (actionType === "edit" && onFormSubmission) {
+      // await editPostOnDb()
+      // editPostOnState(post, selectedPostId as Post["id"])
+      // onFormSubmission()
+    }
   }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) =>

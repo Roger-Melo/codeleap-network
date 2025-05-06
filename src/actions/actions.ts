@@ -1,39 +1,42 @@
 import { z } from "zod"
 import { baseUrl } from "@/lib/utils"
 import { postFormSchema, postSchema } from "@/lib/types"
-import { type Post } from "@/lib/types"
+import { type AddedPostToApi } from "@/lib/types"
 
-export async function addPostToDb(e: React.FormEvent<HTMLFormElement>, addPostToState: (newPost: Post) => void) {
+export async function addPostToDb(post: AddedPostToApi) {
   const failMessage = "Could not add post. Please, try again in a few minutes."
   try {
-    const { title, content, username } = Object.fromEntries(new FormData(e.currentTarget))
     const addedPostToApiSchema = postFormSchema.extend({ username: z.string() })
-    const validatedNewPost = addedPostToApiSchema.safeParse({ title, content, username })
+    const validatedPost = addedPostToApiSchema.safeParse(post)
 
-    if (!validatedNewPost.success) {
-      return alert("Invalid post data.")
+    if (!validatedPost.success) {
+      return { message: "Invalid post data." }
     }
 
     const response = await fetch(baseUrl, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(validatedNewPost.data)
+      body: JSON.stringify(validatedPost.data)
     })
 
     if (!response.ok) {
-      return alert(failMessage)
+      return { message: failMessage }
     }
 
     const createdPostOnDb: unknown = await response.json()
     const validatedCreatedPostOnDb = postSchema.safeParse(createdPostOnDb)
     if (!validatedCreatedPostOnDb.success) {
-      return alert("Post was not created on db")
+      return { message: "Post was not created on db" }
     }
 
-    addPostToState(validatedCreatedPostOnDb.data)
+    return { createdPostOnDb: validatedCreatedPostOnDb.data }
   } catch {
-    alert(failMessage)
+    return { message: failMessage }
   }
+}
+
+export async function editPostOnDb() {
+  console.log("executou editPostOnDb")
 }
 
 const usernameSchema = z.string()
