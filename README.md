@@ -43,7 +43,7 @@ traduza o parágrafo abaixo para inglês. pode corrigir, adaptar ou melhorar, se
 - **E2E Tests**. Playwright tests simulate real user behavior, ensuring the app works as expected from start to finish quando se trata de ler, criar, editar e deletar posts. 
 -->
 
-- **Web Framework**. Social networks usually require SEO. For example, if someone searches for my Instagram profile on Google, it should appear among the top results. Next.js is optimized for SEO and also provides additional features that enable the development of high-quality web applications.
+- **Web Framework**. Social networks usually require SEO — e.g., if someone searches for my Instagram profile on Google, it should appear among the top results. Next.js is optimized for SEO and also provides additional features that enable the development of high-quality web applications.
 
 - **Styling**. Tailwind CSS follows a mobile-first approach, which ensures the UI is responsive right from the start on mobile devices and smaller screen sizes. 
 
