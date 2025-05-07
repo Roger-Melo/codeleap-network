@@ -1,4 +1,4 @@
-![](public/readme/codeleap-network-banner.jpg)
+![](assets/readme/codeleap-network-banner.jpg)
 
 <div align="center">
   <h1 align="center">
