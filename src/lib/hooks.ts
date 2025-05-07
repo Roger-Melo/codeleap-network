@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { PostsContext } from "@/contexts/posts-context-provider"
 import { UsernameContext } from "@/contexts/username-context-provider"
 
-export function usePostsContext() {
+export function usePostsContext () {
   const context = useContext(PostsContext)
   if (!context) {
     throw new Error("useContext must be used within a PostsContextProvider")
@@ -11,7 +11,7 @@ export function usePostsContext() {
   return context
 }
 
-export function useUsernameContext() {
+export function useUsernameContext () {
   const context = useContext(UsernameContext)
   if (!context) {
     throw new Error("useContext must be used within a UsernameContextProvider")

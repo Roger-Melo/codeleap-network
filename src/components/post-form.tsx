@@ -14,13 +14,13 @@ type PostFormProps = {
   closeDialog?: () => void
 }
 
-function PostFormHeading() {
+function PostFormHeading () {
   return <h2 className="text-lg sm:text-xl font-bold">What’s on your mind?</h2>
 }
 
 const emptyFormDataState = { title: "", content: "" }
 
-export function PostForm({ actionType, closeDialog }: PostFormProps) {
+export function PostForm ({ actionType, closeDialog }: PostFormProps) {
   const { editPostOnState, addPostToState, selectedPost, selectedPostId } = usePostsContext()
   const { usernameState } = useUsernameContext()
   const [formDataState, setFormDataState] = useState<PostFormType>(
@@ -29,7 +29,7 @@ export function PostForm({ actionType, closeDialog }: PostFormProps) {
       : emptyFormDataState
   )
 
-  async function handleFormSubmittion(e: React.FormEvent<HTMLFormElement>) {
+  async function handleFormSubmittion (e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     const post = {

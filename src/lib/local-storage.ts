@@ -1,6 +1,6 @@
 const isWindowUndefined = typeof window === "undefined"
 
-export function getStoredUsername() {
+export function getStoredUsername () {
   if (isWindowUndefined) {
     return ""
   }
@@ -8,7 +8,7 @@ export function getStoredUsername() {
   return localStorage.getItem("username") ?? ""
 }
 
-export function setUsernameOnStorage(username: string) {
+export function setUsernameOnStorage (username: string) {
   if (isWindowUndefined) {
     return
   }

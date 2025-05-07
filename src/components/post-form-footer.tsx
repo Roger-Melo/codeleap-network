@@ -7,7 +7,7 @@ type PostFormFooterProps = {
   formDataState: PostFormType
 }
 
-export function PostFormFooter({ actionType, formDataState }: PostFormFooterProps) {
+export function PostFormFooter ({ actionType, formDataState }: PostFormFooterProps) {
   const isSomeFieldEmpty = Object.values(formDataState).some((fieldValue) => fieldValue === "")
   return actionType === "add"
     ? (

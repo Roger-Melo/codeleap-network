@@ -10,7 +10,7 @@ import { postsDataSchema } from "@/lib/types"
 
 type ClientProtectionProps = { children: React.ReactNode }
 
-export function FeedClientWrapper({ children }: ClientProtectionProps) {
+export function FeedClientWrapper ({ children }: ClientProtectionProps) {
   const router = useRouter()
   const { usernameState } = useUsernameContext()
   const [hasMounted, setHasMounted] = useState(false)
@@ -27,7 +27,7 @@ export function FeedClientWrapper({ children }: ClientProtectionProps) {
   }, [hasMounted, usernameState, router])
 
   useEffect(() => {
-    async function loadPosts() {
+    async function loadPosts () {
       const response = await fetch(baseUrl)
       const data: unknown = await response.json()
       const validatedData = postsDataSchema.safeParse(data)

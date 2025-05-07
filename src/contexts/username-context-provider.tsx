@@ -14,7 +14,7 @@ type UsernameContextProviderProps = {
 
 export const UsernameContext = createContext<UsernameContextType | null>(null)
 
-export function UsernameContextProvider({ children }: UsernameContextProviderProps) {
+export function UsernameContextProvider ({ children }: UsernameContextProviderProps) {
   const [usernameState, setUsernameState] = useState("")
 
   // run only in the browser, after first paint. necessary to avoid hydration mismatch
@@ -25,7 +25,7 @@ export function UsernameContextProvider({ children }: UsernameContextProviderPro
     }
   }, [])
 
-  function setUsername(username: string) {
+  function setUsername (username: string) {
     setUsernameOnStorage(username)
     setUsernameState(username)
   }

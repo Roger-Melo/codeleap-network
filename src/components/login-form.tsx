@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { setUsernameAction } from "@/actions/actions"
 import { useUsernameContext } from "@/lib/hooks"
 
-export function LoginForm() {
+export function LoginForm () {
   const router = useRouter()
   const { setUsername } = useUsernameContext()
   const [usernameFieldState, setUsernameFieldState] = useState("")
@@ -16,7 +16,7 @@ export function LoginForm() {
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setUsernameFieldState(e.target.value)
 
-  async function handleFormSubmittion(formData: FormData) {
+  async function handleFormSubmittion (formData: FormData) {
     const { error, errorMessage, username } = await setUsernameAction(formData.get("username"))
     if (error) {
       alert(errorMessage)

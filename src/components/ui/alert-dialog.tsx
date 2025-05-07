@@ -6,13 +6,13 @@ import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
-function AlertDialog({
+function AlertDialog ({
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Root>) {
   return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />
 }
 
-function AlertDialogTrigger({
+function AlertDialogTrigger ({
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Trigger>) {
   return (
@@ -20,7 +20,7 @@ function AlertDialogTrigger({
   )
 }
 
-function AlertDialogPortal({
+function AlertDialogPortal ({
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Portal>) {
   return (
@@ -28,7 +28,7 @@ function AlertDialogPortal({
   )
 }
 
-function AlertDialogOverlay({
+function AlertDialogOverlay ({
   className,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Overlay>) {
@@ -44,7 +44,7 @@ function AlertDialogOverlay({
   )
 }
 
-function AlertDialogContent({
+function AlertDialogContent ({
   className,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Content>) {
@@ -63,7 +63,7 @@ function AlertDialogContent({
   )
 }
 
-function AlertDialogHeader({
+function AlertDialogHeader ({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -76,7 +76,7 @@ function AlertDialogHeader({
   )
 }
 
-function AlertDialogFooter({
+function AlertDialogFooter ({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -92,7 +92,7 @@ function AlertDialogFooter({
   )
 }
 
-function AlertDialogTitle({
+function AlertDialogTitle ({
   className,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Title>) {
@@ -105,7 +105,7 @@ function AlertDialogTitle({
   )
 }
 
-function AlertDialogDescription({
+function AlertDialogDescription ({
   className,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Description>) {
@@ -118,7 +118,7 @@ function AlertDialogDescription({
   )
 }
 
-function AlertDialogAction({
+function AlertDialogAction ({
   className,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Action>) {
@@ -130,7 +130,7 @@ function AlertDialogAction({
   )
 }
 
-function AlertDialogCancel({
+function AlertDialogCancel ({
   className,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel>) {

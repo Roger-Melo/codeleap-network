@@ -9,7 +9,7 @@ import { type Post } from "@/lib/types"
 
 type PostProps = { post: Post }
 
-function PostHeader({ post }: PostProps) {
+function PostHeader ({ post }: PostProps) {
   const { usernameState } = useUsernameContext()
   return (
     <header className="bg-primary-blue rounded-t-2xl p-5 flex flex-col gap-4 sm:flex-row sm:justify-between">
@@ -26,7 +26,7 @@ function PostHeader({ post }: PostProps) {
   )
 }
 
-function PostInfo({ post }: PostProps) {
+function PostInfo ({ post }: PostProps) {
   return (
     <div className="text-lg text-primary-darkest-gray sm:flex sm:justify-between sm:items-center">
       <h4 className="font-bold">@{post.username}</h4>
@@ -39,7 +39,7 @@ function PostInfo({ post }: PostProps) {
   )
 }
 
-function PostText({ post }: PostProps) {
+function PostText ({ post }: PostProps) {
   const paragraphs = post.content.split(/\n{2,}/g)
   return paragraphs.map((paragraph, i) =>
     <p key={i}>
@@ -53,7 +53,7 @@ function PostText({ post }: PostProps) {
   )
 }
 
-function Post({ post }: PostProps) {
+function Post ({ post }: PostProps) {
   return (
     <li>
       <section>
@@ -69,7 +69,7 @@ function Post({ post }: PostProps) {
   )
 }
 
-export function PostsList() {
+export function PostsList () {
   const { posts } = usePostsContext()
   return posts.length === 0
     ? <h2 className="mx-auto text-center">Please create a first post</h2>

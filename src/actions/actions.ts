@@ -4,7 +4,7 @@ import { z } from "zod"
 
 const usernameSchema = z.string()
 
-export async function setUsernameAction(username: unknown) {
+export async function setUsernameAction (username: unknown) {
   try {
     const validatedUsername = usernameSchema.safeParse(username)
     return !validatedUsername.success

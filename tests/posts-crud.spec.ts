@@ -8,7 +8,7 @@ const posts = [
   { title: "Post 3", content: "Parágrafo 1 do post 3.\n\nParágrafo 2 do post 3." },
 ] as const
 
-async function deletePosts(page: Page) {
+async function deletePosts (page: Page) {
   for (const post of posts) {
     const selectedPost = page.getByRole("listitem").filter({ hasText: post.title }).first()
     await selectedPost.getByTestId("deletePostButton").click()
@@ -18,13 +18,13 @@ async function deletePosts(page: Page) {
   await checkDeletedPosts(page)
 }
 
-async function checkDeletedPosts(page: Page) {
+async function checkDeletedPosts (page: Page) {
   for (const post of posts) {
     await expect(page.locator("main")).not.toHaveText(post.title)
   }
 }
 
-async function createPosts(page: Page) {
+async function createPosts (page: Page) {
   // select form elements
   const inputTitle = page.getByLabel("Title")
   const textAreaContent = page.getByLabel("Content")
@@ -43,7 +43,7 @@ async function createPosts(page: Page) {
   await checkCreatedPosts(page)
 }
 
-async function checkCreatedPosts(page: Page) {
+async function checkCreatedPosts (page: Page) {
   for (const post of posts) {
     const postItem = page.getByRole("listitem").filter({ hasText: post.title }).first()
     await expect(postItem.getByRole("heading", { name: post.title })).toBeVisible()
@@ -59,7 +59,7 @@ const updatedPosts = [
   { originalTitle: "Post 3", title: "Post 3 (editado)", content: "Parágrafo 1 do post 3 (editado).\n\nParágrafo 2 do post 3 (editado)." },
 ] as const
 
-async function editPosts(page: Page) {
+async function editPosts (page: Page) {
   for (const post of updatedPosts) {
     const selectedPost = page.getByRole("listitem").filter({ hasText: post.originalTitle }).first()
     await selectedPost.getByTestId("editPostButton").click()
@@ -77,7 +77,7 @@ async function editPosts(page: Page) {
   await checkEditedPosts(page)
 }
 
-async function checkEditedPosts(page: Page) {
+async function checkEditedPosts (page: Page) {
   for (const post of updatedPosts) {
     const postItem = page.getByRole("listitem").filter({ hasText: post.title }).first()
     await expect(postItem.getByRole("heading", { name: post.title })).toBeVisible()

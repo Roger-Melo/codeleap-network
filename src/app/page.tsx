@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { useUsernameContext } from "@/lib/hooks"
 import { LoginForm } from "@/components/login-form"
 
-export default function Home() {
+export default function Home () {
   const { usernameState } = useUsernameContext()
   const router = useRouter()
 

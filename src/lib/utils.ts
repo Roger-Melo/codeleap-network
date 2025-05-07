@@ -1,13 +1,13 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
-export function cn(...inputs: ClassValue[]) {
+export function cn (...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
 export const baseUrl = "https://dev.codeleap.co.uk/careers/"
 
-export function getPostTimeCreation(timestamp: string) {
+export function getPostTimeCreation (timestamp: string) {
   const nowMiliseconds = Date.now()
   const createdMiliseconds = new Date(timestamp).getTime()
   const seconds = (nowMiliseconds - createdMiliseconds) / 1000

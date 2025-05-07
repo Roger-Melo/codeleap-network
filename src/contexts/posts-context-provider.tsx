@@ -21,29 +21,29 @@ type PostsContextProviderProps = {
 
 export const PostsContext = createContext<PostsContextType | null>(null)
 
-export function PostsContextProvider({ data, children }: PostsContextProviderProps) {
+export function PostsContextProvider ({ data, children }: PostsContextProviderProps) {
   const [posts, setPosts] = useState(data)
   const [selectedPostId, setSelectedPostId] = useState<Post["id"] | null>(null)
 
   const selectedPost = posts.find((post) => post.id === selectedPostId)
 
-  function handleSelectPost(id: Post["id"]) {
+  function handleSelectPost (id: Post["id"]) {
     setSelectedPostId(id)
   }
 
-  function handleUnselectPost() {
+  function handleUnselectPost () {
     setSelectedPostId(null)
   }
 
-  async function addPostToState(newPost: Post) {
+  async function addPostToState (newPost: Post) {
     setPosts((prev) => [newPost, ...prev])
   }
 
-  async function deletePostFromState(id: Post["id"]) {
+  async function deletePostFromState (id: Post["id"]) {
     setPosts((prev) => prev.filter((post) => post.id !== id))
   }
 
-  async function editPostOnState(editedData: EditedPostToApi, selectedPostId: Post["id"]) {
+  async function editPostOnState (editedData: EditedPostToApi, selectedPostId: Post["id"]) {
     setPosts((prev) => prev.map((post) =>
       post.id === selectedPostId
         ? { ...post, title: editedData.title, content: editedData.content }

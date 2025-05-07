@@ -16,11 +16,11 @@ const EditIcon = forwardRef<SVGSVGElement, ComponentPropsWithoutRef<"svg">>((pro
 
 EditIcon.displayName = "EditIcon"
 
-export function EditPost({ postId }: PostIdProp) {
+export function EditPost ({ postId }: PostIdProp) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { handleSelectPost, handleUnselectPost } = usePostsContext()
 
-  function handleOpenChange(open: boolean) {
+  function handleOpenChange (open: boolean) {
     setIsDialogOpen(open)
     if (!open) {
       handleUnselectPost()

@@ -4,7 +4,7 @@ import { type AddedPostToApi, postFormSchema, postSchema } from "@/lib/types"
 
 const addedPostToApiSchema = postFormSchema.extend({ username: z.string() })
 
-export async function addPostToDb(post: AddedPostToApi) {
+export async function addPostToDb (post: AddedPostToApi) {
   const failMessage = "Could not add post. Please, try again in a few minutes."
   try {
     const validatedPost = addedPostToApiSchema.safeParse(post)
@@ -36,7 +36,7 @@ export async function addPostToDb(post: AddedPostToApi) {
 
 const postIdSchema = z.number()
 
-export async function editPostOnDb(editedData: unknown, postId: unknown) {
+export async function editPostOnDb (editedData: unknown, postId: unknown) {
   const failMessage = "Could not edit post. Please, try again in a few minutes."
   try {
     const validatedEditedData = postFormSchema.safeParse(editedData)

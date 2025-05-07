@@ -16,11 +16,11 @@ const DeleteIcon = forwardRef<SVGSVGElement, ComponentPropsWithoutRef<"svg">>((p
 
 DeleteIcon.displayName = "DeleteIcon"
 
-export function DeletePost({ postId }: PostIdProp) {
+export function DeletePost ({ postId }: PostIdProp) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { deletePostFromState } = usePostsContext()
 
-  async function handleClickDelete() {
+  async function handleClickDelete () {
     flushSync(() => setIsDialogOpen(false))
     const failMessage = "Could not delete post. Please, try again in a few minutes."
     try {
