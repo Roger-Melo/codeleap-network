@@ -10,7 +10,6 @@
     "test": "npx playwright test --ui"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-alert-dialog": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.11",
     "@radix-ui/react-label": "^2.1.4",
@@ -21,7 +20,6 @@
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hook-form": "7.56.1",
     "tailwind-merge": "^3.2.0",
     "zod": "^3.24.3"
   },
