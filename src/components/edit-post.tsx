@@ -3,6 +3,8 @@
 import { type ComponentPropsWithoutRef, forwardRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+
 import { usePostsContext } from "@/lib/hooks"
 import { type PostIdProp } from "@/lib/types"
 import { PostForm } from "./post-form"
@@ -29,9 +31,16 @@ export function EditPost({ postId }: PostIdProp) {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild data-testid="editPostButton" onClick={() => handleSelectPost(postId)}>
-        <EditIcon />
-      </DialogTrigger>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DialogTrigger asChild data-testid="editPostButton" onClick={() => handleSelectPost(postId)}>
+              <EditIcon />
+            </DialogTrigger>
+          </TooltipTrigger>
+          <TooltipContent><p>Edit Post</p></TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <DialogContent className="sm:max-w-[600px] md:max-w-[640px]" aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Edit post</DialogTitle>

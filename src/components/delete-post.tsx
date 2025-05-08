@@ -4,6 +4,7 @@ import { z } from "zod"
 import { type ComponentPropsWithoutRef, forwardRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { AlertDialogAction, AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { type PostIdProp } from "@/lib/types"
 import { baseUrl } from "@/lib/utils"
 import { usePostsContext } from "@/lib/hooks"
@@ -48,9 +49,16 @@ export function DeletePost({ postId }: PostIdProp) {
 
   return (
     <AlertDialog open={isDialogOpen} onOpenChange={(open) => setIsDialogOpen(open)}>
-      <AlertDialogTrigger asChild data-testid="deletePostButton">
-        <DeleteIcon />
-      </AlertDialogTrigger>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <AlertDialogTrigger asChild data-testid="deletePostButton">
+              <DeleteIcon />
+            </AlertDialogTrigger>
+          </TooltipTrigger>
+          <TooltipContent><p>Delete Post</p></TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <AlertDialogContent className="sm:max-w-[600px] md:max-w-[640px]">
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure you want to delete this post?</AlertDialogTitle>
